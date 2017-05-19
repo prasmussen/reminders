@@ -8800,15 +8800,46 @@ var _user$project$App_View$renderCompose = function (model) {
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$label,
+						_elm_lang$html$Html$p,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('label'),
+							_0: _elm_lang$html$Html_Attributes$class('control'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Query'),
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: A2(_elm_lang$html$Html_Attributes$attribute, 'autofocus', ''),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('input is-large'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('buy milk tomorrow 18:00'),
+											_1: {
+												ctor: '::',
+												_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$value(model.query),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -8817,70 +8848,24 @@ var _user$project$App_View$renderCompose = function (model) {
 							_elm_lang$html$Html$p,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('control'),
+								_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
 								_1: {ctor: '[]'}
 							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$input,
-									{
-										ctor: '::',
-										_0: A2(_elm_lang$html$Html_Attributes$attribute, 'autofocus', ''),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('input is-large'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk tomorrow 18:00'),
-												_1: {
-													ctor: '::',
-													_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$type_('text'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$value(model.query),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												}
-											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}),
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$p,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
+									_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
 									_1: {ctor: '[]'}
 								},
 								{ctor: '[]'}),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$p,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
-										_1: {ctor: '[]'}
-									},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: _user$project$App_View$renderDraft(model),
-									_1: {ctor: '[]'}
-								}
+								_0: _user$project$App_View$renderDraft(model),
+								_1: {ctor: '[]'}
 							}
 						}
 					}

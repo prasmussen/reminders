@@ -77,9 +77,7 @@ authUserContent model =
 renderCompose model =
   Html.form []
     [ div [ class "field" ]
-        [ label [ class "label" ]
-            [ text "Query" ]
-        , p [ class "control" ]
+        [ p [ class "control" ]
             [ input [ attribute "autofocus" "", class "input is-large", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
             ]
         , p [ id "reminder-datetime" ] []

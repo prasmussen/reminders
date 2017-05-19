@@ -8260,7 +8260,6 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$App_Model$initModel = {query: '', user: _elm_lang$core$Maybe$Nothing};
 var _user$project$App_Model$Model = F2(
 	function (a, b) {
 		return {query: a, user: b};
@@ -8268,6 +8267,15 @@ var _user$project$App_Model$Model = F2(
 var _user$project$App_Model$User = function (a) {
 	return {email: a};
 };
+var _user$project$App_Model$Received = function (a) {
+	return {ctor: 'Received', _0: a};
+};
+var _user$project$App_Model$RequestFailed = function (a) {
+	return {ctor: 'RequestFailed', _0: a};
+};
+var _user$project$App_Model$Loading = {ctor: 'Loading'};
+var _user$project$App_Model$NotAsked = {ctor: 'NotAsked'};
+var _user$project$App_Model$initModel = {query: '', user: _user$project$App_Model$NotAsked};
 
 var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingPort(
 	'authChange',
@@ -8290,6 +8298,11 @@ var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingP
 				_1: {ctor: '[]'}
 			}
 		}));
+var _user$project$App_Port$requestUser = _elm_lang$core$Native_Platform.outgoingPort(
+	'requestUser',
+	function (v) {
+		return v;
+	});
 var _user$project$App_Port$signIn = _elm_lang$core$Native_Platform.outgoingPort(
 	'signIn',
 	function (v) {
@@ -8335,7 +8348,9 @@ var _user$project$App_Update$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{user: _p0._0}),
+						{
+							user: _user$project$App_Model$Received(_p0._0)
+						}),
 					{ctor: '[]'});
 		}
 	});
@@ -8348,49 +8363,104 @@ var _user$project$App_Update$SetQuery = function (a) {
 	return {ctor: 'SetQuery', _0: a};
 };
 
-var _user$project$App_View$authUserContent = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('columns'),
-			_1: {ctor: '[]'}
-		},
-		{
+var _user$project$App_View$authUserContent = F2(
+	function (model, user) {
+		return {
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('column is-half is-offset-one-quarter'),
-					_1: {ctor: '[]'}
-				},
+				_elm_lang$html$Html$form,
+				{ctor: '[]'},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$form,
-						{ctor: '[]'},
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('field'),
+							_1: {ctor: '[]'}
+						},
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$div,
+								_elm_lang$html$Html$label,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('field'),
+									_0: _elm_lang$html$Html_Attributes$class('label'),
 									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
+									_0: _elm_lang$html$Html$text('Query'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$p,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('control'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$input,
+											{
+												ctor: '::',
+												_0: A2(_elm_lang$html$Html_Attributes$attribute, 'autofocus', ''),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('input'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$placeholder('Buy milk in 2 hours'),
+														_1: {
+															ctor: '::',
+															_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$type_('text'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$value(model.query),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$label,
+										_elm_lang$html$Html$p,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('label'),
+											_0: _elm_lang$html$Html_Attributes$class('control'),
 											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Query'),
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Create reminder'),
+													_1: {ctor: '[]'}
+												}),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -8399,209 +8469,233 @@ var _user$project$App_View$authUserContent = function (model) {
 											_elm_lang$html$Html$p,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('control'),
+												_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
 												_1: {ctor: '[]'}
 											},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$input,
-													{
-														ctor: '::',
-														_0: A2(_elm_lang$html$Html_Attributes$attribute, 'autofocus', ''),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('input'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$placeholder('Buy milk in 2 hours'),
-																_1: {
-																	ctor: '::',
-																	_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$type_('text'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$value(model.query),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													},
-													{ctor: '[]'}),
-												_1: {ctor: '[]'}
-											}),
+											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												_elm_lang$html$Html$p,
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('control'),
+													_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
 													_1: {ctor: '[]'}
 												},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Create reminder'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
+												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$p,
+													_elm_lang$html$Html$div,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
+														_0: _elm_lang$html$Html_Attributes$id('reminders'),
 														_1: {ctor: '[]'}
 													},
-													{ctor: '[]'}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$p,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
-															_1: {ctor: '[]'}
-														},
-														{ctor: '[]'}),
-													_1: {
+													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$div,
+															_elm_lang$html$Html$table,
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$id('reminders'),
+																_0: _elm_lang$html$Html_Attributes$class('table'),
 																_1: {ctor: '[]'}
 															},
 															{
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$table,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$class('table'),
-																		_1: {ctor: '[]'}
-																	},
+																	_elm_lang$html$Html$thead,
+																	{ctor: '[]'},
 																	{
 																		ctor: '::',
 																		_0: A2(
-																			_elm_lang$html$Html$thead,
+																			_elm_lang$html$Html$tr,
 																			{ctor: '[]'},
 																			{
 																				ctor: '::',
 																				_0: A2(
-																					_elm_lang$html$Html$tr,
+																					_elm_lang$html$Html$th,
 																					{ctor: '[]'},
 																					{
 																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$th,
-																							{ctor: '[]'},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('Title'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_elm_lang$html$Html$th,
-																								{ctor: '[]'},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('When'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {ctor: '[]'}
-																						}
+																						_0: _elm_lang$html$Html$text('Title'),
+																						_1: {ctor: '[]'}
 																					}),
-																				_1: {ctor: '[]'}
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_elm_lang$html$Html$th,
+																						{ctor: '[]'},
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html$text('When'),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {ctor: '[]'}
+																				}
 																			}),
-																		_1: {
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$tbody,
+																		{ctor: '[]'},
+																		{
 																			ctor: '::',
 																			_0: A2(
-																				_elm_lang$html$Html$tbody,
+																				_elm_lang$html$Html$tr,
 																				{ctor: '[]'},
 																				{
 																					ctor: '::',
 																					_0: A2(
-																						_elm_lang$html$Html$tr,
+																						_elm_lang$html$Html$td,
 																						{ctor: '[]'},
 																						{
 																							ctor: '::',
 																							_0: A2(
-																								_elm_lang$html$Html$td,
-																								{ctor: '[]'},
+																								_elm_lang$html$Html$a,
 																								{
 																									ctor: '::',
-																									_0: A2(
-																										_elm_lang$html$Html$a,
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html_Attributes$href('https://www.google.com/calendar/event?eid=c3B2YjQybHRqOWRkY3NuNDNlOTU1aGV0NGsgcGV0dGVyLnJhc211c3NlbkBt'),
-																											_1: {ctor: '[]'}
-																										},
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html$text('buy milk'),
-																											_1: {ctor: '[]'}
-																										}),
+																									_0: _elm_lang$html$Html_Attributes$href('https://www.google.com/calendar/event?eid=c3B2YjQybHRqOWRkY3NuNDNlOTU1aGV0NGsgcGV0dGVyLnJhc211c3NlbkBt'),
+																									_1: {ctor: '[]'}
+																								},
+																								{
+																									ctor: '::',
+																									_0: _elm_lang$html$Html$text('buy milk'),
 																									_1: {ctor: '[]'}
 																								}),
-																							_1: {
-																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$html$Html$td,
-																									{ctor: '[]'},
-																									{
-																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('in an hour'),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}
+																							_1: {ctor: '[]'}
 																						}),
-																					_1: {ctor: '[]'}
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							_elm_lang$html$Html$td,
+																							{ctor: '[]'},
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html$text('in an hour'),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {ctor: '[]'}
+																					}
 																				}),
 																			_1: {ctor: '[]'}
-																		}
-																	}),
-																_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
 															}),
 														_1: {ctor: '[]'}
-													}
-												}
+													}),
+												_1: {ctor: '[]'}
 											}
 										}
 									}
-								}),
-							_1: {ctor: '[]'}
+								}
+							}
 						}),
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
-		});
+		};
+	});
+var _user$project$App_View$anonUserContent = {
+	ctor: '::',
+	_0: A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('content is-medium'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Welcome to Reminders!'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders.'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}),
+	_1: {ctor: '[]'}
 };
-var _user$project$App_View$anonUserContent = function (model) {
+var _user$project$App_View$renderContent = function (model) {
+	var content = function () {
+		var _p0 = model.user;
+		switch (_p0.ctor) {
+			case 'NotAsked':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('has-text-centered'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Initializing...'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				};
+			case 'Loading':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('has-text-centered'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Loading...'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				};
+			case 'RequestFailed':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('has-text-centered'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p0._0),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				};
+			default:
+				if (_p0._0.ctor === 'Just') {
+					return A2(_user$project$App_View$authUserContent, model, _p0._0._0);
+				} else {
+					return _user$project$App_View$anonUserContent;
+				}
+		}
+	}();
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -8618,92 +8712,58 @@ var _user$project$App_View$anonUserContent = function (model) {
 					_0: _elm_lang$html$Html_Attributes$class('column is-half is-offset-one-quarter'),
 					_1: {ctor: '[]'}
 				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('content is-medium'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$h1,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Welcome to Reminders!'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$p,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders.'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}),
+				content),
 			_1: {ctor: '[]'}
 		});
-};
-var _user$project$App_View$renderContent = function (model) {
-	var _p0 = model.user;
-	if (_p0.ctor === 'Just') {
-		return _user$project$App_View$authUserContent(model);
-	} else {
-		return _user$project$App_View$anonUserContent(model);
-	}
 };
 var _user$project$App_View$renderNav = function (model) {
 	var authLink = function () {
 		var _p1 = model.user;
-		if (_p1.ctor === 'Just') {
-			return A2(
-				_elm_lang$html$Html$a,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
-					_1: {
+		if (_p1.ctor === 'Received') {
+			if (_p1._0.ctor === 'Just') {
+				return A2(
+					_elm_lang$html$Html$a,
+					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignOut),
+						_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignOut),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Sign out (',
+								A2(_elm_lang$core$Basics_ops['++'], _p1._0._0.email, ')'))),
 						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'Sign out (',
-							A2(_elm_lang$core$Basics_ops['++'], _p1._0.email, ')'))),
-					_1: {ctor: '[]'}
-				});
+					});
+			} else {
+				return A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignIn),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Sign in'),
+						_1: {ctor: '[]'}
+					});
+			}
 		} else {
 			return A2(
-				_elm_lang$html$Html$a,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignIn),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Sign in'),
-					_1: {ctor: '[]'}
-				});
+				_elm_lang$html$Html$span,
+				{ctor: '[]'},
+				{ctor: '[]'});
 		}
 	}();
 	return A2(
@@ -8828,7 +8888,16 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
-		init: {ctor: '_Tuple2', _0: _user$project$App_Model$initModel, _1: _elm_lang$core$Platform_Cmd$none},
+		init: A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				_user$project$App_Model$initModel,
+				{user: _user$project$App_Model$Loading}),
+			{
+				ctor: '::',
+				_0: _user$project$App_Port$requestUser(true),
+				_1: {ctor: '[]'}
+			}),
 		view: _user$project$App_View$view,
 		update: _user$project$App_Update$update,
 		subscriptions: _user$project$Main$subscriptions

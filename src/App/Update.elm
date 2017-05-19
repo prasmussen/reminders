@@ -1,7 +1,7 @@
 module App.Update exposing (..)
 
 import App.Model exposing (..)
-import App.Port exposing (signIn, signOut)
+import App.Port as Port
 
 type Msg
   = SetQuery String
@@ -15,8 +15,8 @@ update msg model =
     SetQuery query ->
       { model | query = query } ! []
     SignIn ->
-      model ! [signIn True]
+      model ! [Port.signIn True]
     SignOut ->
-      model ! [signOut True]
+      model ! [Port.signOut True]
     AuthChange user ->
-      { model | user = user } ! []
+      { model | user = Received user } ! []

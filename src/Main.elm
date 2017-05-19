@@ -6,7 +6,7 @@ import App.Port as Port
 
 main =
   Html.program
-    { init = (initModel, Cmd.none)
+    { init = { initModel | user = Loading } ! [Port.requestUser True]
     , view = view
     , update = update
     , subscriptions = subscriptions

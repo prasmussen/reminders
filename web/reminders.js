@@ -1,28 +1,10 @@
 var app = Elm.Main.fullscreen();
 
-// Helper function to send current user to elm
-function sendUser(auth) {
-    var user = getUser(auth);
-    app.ports.authChange.send(user);
-}
+app.ports.requestUser.subscribe(function() {
+    gapi.load('client:auth2', gapiInit);
+});
 
-
-function getUser(auth) {
-    var isAuthorized = auth.isSignedIn.get();
-
-    if (!isAuthorized) {
-        return null;
-    }
-
-    var user = auth.currentUser.get();
-    var profile = user.getBasicProfile();
-
-    return {
-        email: profile.getEmail(),
-    };
-}
-
-gapi.load('client:auth2', function() {
+function gapiInit() {
     var SCOPE = 'https://www.googleapis.com/auth/calendar';
 
     gapi.client.init({
@@ -52,4 +34,27 @@ gapi.load('client:auth2', function() {
         sendUser(auth);
     });
 
-});
+}
+
+
+// Helper function to send current user to elm
+function sendUser(auth) {
+    var user = getUser(auth);
+    app.ports.authChange.send(user);
+}
+
+
+function getUser(auth) {
+    var isAuthorized = auth.isSignedIn.get();
+
+    if (!isAuthorized) {
+        return null;
+    }
+
+    var user = auth.currentUser.get();
+    var profile = user.getBasicProfile();
+
+    return {
+        email: profile.getEmail(),
+    };
+}

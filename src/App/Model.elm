@@ -4,10 +4,17 @@ type alias Model =
   { query : String
   , user : RemoteData (Maybe User)
   , reminders : RemoteData (List Reminder)
+  , draft : Maybe Draft
   }
 
 type alias User =
   { email : String
+  }
+
+type alias Draft =
+  { title : String
+  , start : String
+  , end : String
   }
 
 type alias Reminder =
@@ -28,4 +35,5 @@ initModel =
   { query = ""
   , user = NotAsked
   , reminders = NotAsked
+  , draft = Nothing
   }

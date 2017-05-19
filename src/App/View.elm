@@ -77,15 +77,11 @@ authUserContent model =
           [ label [ class "label" ]
               [ text "Query" ]
           , p [ class "control" ]
-              [ input [ attribute "autofocus" "", class "input", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query]
-                  []
-              ]
-          , p [ class "control" ]
-              [ button [ class "button is-primary" ]
-                  [ text "Create reminder" ]
+              [ input [ attribute "autofocus" "", class "input", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
               ]
           , p [ id "reminder-datetime" ] []
           , p [ id "reminder-relative-time" ] []
+          , renderDraft model
           , renderReminders model
           ]
       ]
@@ -118,5 +114,24 @@ renderReminders model =
                       ]
                   ]
               , tbody [] (List.map reminderTr reminders)
+              ]
+          ]
+
+renderDraft model =
+  case model.draft of
+    Nothing ->
+      div [ id "draft" ] []
+    Just draft ->
+      div [ class "card", id "draft" ]
+          [ div [ class "card-content" ]
+              [ div [ class "content" ]
+                  [ text draft.title
+                  , br [] []
+                  , small [] [ text draft.start ]
+                  ]
+              ]
+          , footer [ class "card-footer" ]
+              [ a [ class "card-footer-item" ]
+                  [ text "Save reminder" ]
               ]
           ]

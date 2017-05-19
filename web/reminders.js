@@ -9,6 +9,10 @@ app.ports.requestReminders.subscribe(function() {
     requestReminders();
 });
 
+app.ports.parseQuery.subscribe(function(query) {
+    var draft = parseQuery(query);
+    app.ports.draft.send(draft);
+});
 
 function gapiInit() {
     var SCOPE = 'https://www.googleapis.com/auth/calendar';
@@ -72,6 +76,36 @@ function requestReminders() {
     });
 }
 
+function parseQuery(query) {
+    var results = chrono.parse(query);
+    if (results.length < 1) {
+        return null;
+    }
+
+    var res = results[0];
+
+    var startDate = res.start.date();
+    var endDate = startDate;
+
+    if (res.end) {
+        endDate = end.date();
+    }
+
+    var title = query.replace(res.text, "").trim();
+    if (!title) {
+        title = query;
+    }
+
+    return {
+        "title": title,
+        "start": humanDate(startDate),
+        "end": humanDate(endDate),
+    };
+}
+
+function humanDate(dt) {
+    return moment(dt).format("HH:mm @ dddd, DD MMM YYYY");
+}
 
 // Helper function to send current user to elm
 function sendUser(auth) {

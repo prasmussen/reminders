@@ -6,6 +6,10 @@ p.control {
     margin-bottom: 10px;
 }
 
+#draft {
+    height: 145px;
+}
+
 #reminders {
-    margin-top: 40px;
+    margin-top: 60px;
 }

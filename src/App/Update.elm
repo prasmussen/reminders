@@ -9,12 +9,13 @@ type Msg
   | SignOut
   | AuthChange (Maybe User)
   | SetReminders (List Reminder)
+  | SetDraft (Maybe Draft)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     SetQuery query ->
-      { model | query = query } ! []
+      { model | query = query } ! [Port.parseQuery query]
     SignIn ->
       model ! [Port.signIn True]
     SignOut ->
@@ -27,3 +28,5 @@ update msg model =
           { model | user = Received user } ! []
     SetReminders reminders ->
       { model | reminders = Received reminders } ! []
+    SetDraft draft ->
+      { model | draft = draft } ! []

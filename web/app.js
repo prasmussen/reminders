@@ -8260,13 +8260,17 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$App_Model$Model = F3(
-	function (a, b, c) {
-		return {query: a, user: b, reminders: c};
+var _user$project$App_Model$Model = F4(
+	function (a, b, c, d) {
+		return {query: a, user: b, reminders: c, draft: d};
 	});
 var _user$project$App_Model$User = function (a) {
 	return {email: a};
 };
+var _user$project$App_Model$Draft = F3(
+	function (a, b, c) {
+		return {title: a, start: b, end: c};
+	});
 var _user$project$App_Model$Reminder = F4(
 	function (a, b, c, d) {
 		return {title: a, link: b, start: c, startRelative: d};
@@ -8279,7 +8283,7 @@ var _user$project$App_Model$RequestFailed = function (a) {
 };
 var _user$project$App_Model$Loading = {ctor: 'Loading'};
 var _user$project$App_Model$NotAsked = {ctor: 'NotAsked'};
-var _user$project$App_Model$initModel = {query: '', user: _user$project$App_Model$NotAsked, reminders: _user$project$App_Model$NotAsked};
+var _user$project$App_Model$initModel = {query: '', user: _user$project$App_Model$NotAsked, reminders: _user$project$App_Model$NotAsked, draft: _elm_lang$core$Maybe$Nothing};
 
 var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingPort(
 	'authChange',
@@ -8327,6 +8331,42 @@ var _user$project$App_Port$reminders = _elm_lang$core$Native_Platform.incomingPo
 					A2(_elm_lang$core$Json_Decode$field, 'link', _elm_lang$core$Json_Decode$string));
 			},
 			A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string))));
+var _user$project$App_Port$draft = _elm_lang$core$Native_Platform.incomingPort(
+	'draft',
+	_elm_lang$core$Json_Decode$oneOf(
+		{
+			ctor: '::',
+			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Json_Decode$map,
+					_elm_lang$core$Maybe$Just,
+					A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (title) {
+							return A2(
+								_elm_lang$core$Json_Decode$andThen,
+								function (start) {
+									return A2(
+										_elm_lang$core$Json_Decode$andThen,
+										function (end) {
+											return _elm_lang$core$Json_Decode$succeed(
+												{title: title, start: start, end: end});
+										},
+										A2(_elm_lang$core$Json_Decode$field, 'end', _elm_lang$core$Json_Decode$string));
+								},
+								A2(_elm_lang$core$Json_Decode$field, 'start', _elm_lang$core$Json_Decode$string));
+						},
+						A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string))),
+				_1: {ctor: '[]'}
+			}
+		}));
+var _user$project$App_Port$parseQuery = _elm_lang$core$Native_Platform.outgoingPort(
+	'parseQuery',
+	function (v) {
+		return v;
+	});
 var _user$project$App_Port$requestUser = _elm_lang$core$Native_Platform.outgoingPort(
 	'requestUser',
 	function (v) {
@@ -8353,12 +8393,17 @@ var _user$project$App_Update$update = F2(
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'SetQuery':
+				var _p1 = _p0._0;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{query: _p0._0}),
-					{ctor: '[]'});
+						{query: _p1}),
+					{
+						ctor: '::',
+						_0: _user$project$App_Port$parseQuery(_p1),
+						_1: {ctor: '[]'}
+					});
 			case 'SignIn':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -8378,15 +8423,15 @@ var _user$project$App_Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'AuthChange':
-				var _p2 = _p0._0;
-				var _p1 = _p2;
-				if (_p1.ctor === 'Just') {
+				var _p3 = _p0._0;
+				var _p2 = _p3;
+				if (_p2.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								user: _user$project$App_Model$Received(_p2),
+								user: _user$project$App_Model$Received(_p3),
 								reminders: _user$project$App_Model$Loading
 							}),
 						{
@@ -8400,11 +8445,11 @@ var _user$project$App_Update$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								user: _user$project$App_Model$Received(_p2)
+								user: _user$project$App_Model$Received(_p3)
 							}),
 						{ctor: '[]'});
 				}
-			default:
+			case 'SetReminders':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -8413,8 +8458,18 @@ var _user$project$App_Update$update = F2(
 							reminders: _user$project$App_Model$Received(_p0._0)
 						}),
 					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{draft: _p0._0}),
+					{ctor: '[]'});
 		}
 	});
+var _user$project$App_Update$SetDraft = function (a) {
+	return {ctor: 'SetDraft', _0: a};
+};
 var _user$project$App_Update$SetReminders = function (a) {
 	return {ctor: 'SetReminders', _0: a};
 };
@@ -8427,9 +8482,106 @@ var _user$project$App_Update$SetQuery = function (a) {
 	return {ctor: 'SetQuery', _0: a};
 };
 
+var _user$project$App_View$renderDraft = function (model) {
+	var _p0 = model.draft;
+	if (_p0.ctor === 'Nothing') {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('draft'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'});
+	} else {
+		var _p1 = _p0._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('card'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$id('draft'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('card-content'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('content'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(_p1.title),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$br,
+										{ctor: '[]'},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$small,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(_p1.start),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$footer,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('card-footer'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('card-footer-item'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Save reminder'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	}
+};
 var _user$project$App_View$renderReminders = function (model) {
-	var _p0 = model.reminders;
-	switch (_p0.ctor) {
+	var _p2 = model.reminders;
+	switch (_p2.ctor) {
 		case 'NotAsked':
 			return A2(
 				_elm_lang$html$Html$p,
@@ -8458,11 +8610,11 @@ var _user$project$App_View$renderReminders = function (model) {
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p0._0),
+					_0: _elm_lang$html$Html$text(_p2._0),
 					_1: {ctor: '[]'}
 				});
 		default:
-			if (_p0._0.ctor === '[]') {
+			if (_p2._0.ctor === '[]') {
 				return A2(
 					_elm_lang$html$Html$p,
 					{
@@ -8571,7 +8723,7 @@ var _user$project$App_View$renderReminders = function (model) {
 									_0: A2(
 										_elm_lang$html$Html$tbody,
 										{ctor: '[]'},
-										A2(_elm_lang$core$List$map, reminderTr, _p0._0)),
+										A2(_elm_lang$core$List$map, reminderTr, _p2._0)),
 									_1: {ctor: '[]'}
 								}
 							}),
@@ -8660,45 +8812,23 @@ var _user$project$App_View$authUserContent = function (model) {
 									_elm_lang$html$Html$p,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('control'),
+										_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
 										_1: {ctor: '[]'}
 									},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$button,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Create reminder'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}),
+									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
 									_0: A2(
 										_elm_lang$html$Html$p,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$id('reminder-datetime'),
+											_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
 											_1: {ctor: '[]'}
 										},
 										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$p,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$id('reminder-relative-time'),
-												_1: {ctor: '[]'}
-											},
-											{ctor: '[]'}),
+										_0: _user$project$App_View$renderDraft(model),
 										_1: {
 											ctor: '::',
 											_0: _user$project$App_View$renderReminders(model),
@@ -8750,8 +8880,8 @@ var _user$project$App_View$anonUserContent = {
 };
 var _user$project$App_View$renderContent = function (model) {
 	var content = function () {
-		var _p1 = model.user;
-		switch (_p1.ctor) {
+		var _p3 = model.user;
+		switch (_p3.ctor) {
 			case 'NotAsked':
 				return {
 					ctor: '::',
@@ -8798,13 +8928,13 @@ var _user$project$App_View$renderContent = function (model) {
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p1._0),
+							_0: _elm_lang$html$Html$text(_p3._0),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
 				};
 			default:
-				if (_p1._0.ctor === 'Just') {
+				if (_p3._0.ctor === 'Just') {
 					return _user$project$App_View$authUserContent(model);
 				} else {
 					return _user$project$App_View$anonUserContent;
@@ -8833,9 +8963,9 @@ var _user$project$App_View$renderContent = function (model) {
 };
 var _user$project$App_View$renderNav = function (model) {
 	var authLink = function () {
-		var _p2 = model.user;
-		if (_p2.ctor === 'Received') {
-			if (_p2._0.ctor === 'Just') {
+		var _p4 = model.user;
+		if (_p4.ctor === 'Received') {
+			if (_p4._0.ctor === 'Just') {
 				return A2(
 					_elm_lang$html$Html$a,
 					{
@@ -8853,7 +8983,7 @@ var _user$project$App_View$renderNav = function (model) {
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'Sign out (',
-								A2(_elm_lang$core$Basics_ops['++'], _p2._0._0.email, ')'))),
+								A2(_elm_lang$core$Basics_ops['++'], _p4._0._0.email, ')'))),
 						_1: {ctor: '[]'}
 					});
 			} else {
@@ -9001,7 +9131,11 @@ var _user$project$Main$subscriptions = function (model) {
 			_1: {
 				ctor: '::',
 				_0: _user$project$App_Port$reminders(_user$project$App_Update$SetReminders),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$App_Port$draft(_user$project$App_Update$SetDraft),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };

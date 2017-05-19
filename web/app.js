@@ -8829,7 +8829,7 @@ var _user$project$App_View$renderCompose = function (model) {
 										_0: A2(_elm_lang$html$Html_Attributes$attribute, 'autofocus', ''),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('input'),
+											_0: _elm_lang$html$Html_Attributes$class('input is-large'),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk tomorrow 18:00'),

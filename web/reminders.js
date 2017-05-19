@@ -4,6 +4,12 @@ app.ports.requestUser.subscribe(function() {
     gapi.load('client:auth2', gapiInit);
 });
 
+// Listen for reminder list requests from elm
+app.ports.requestReminders.subscribe(function() {
+    requestReminders();
+});
+
+
 function gapiInit() {
     var SCOPE = 'https://www.googleapis.com/auth/calendar';
 
@@ -34,6 +40,36 @@ function gapiInit() {
         sendUser(auth);
     });
 
+}
+
+function requestReminders() {
+    var now = new Date();
+
+    var req = gapi.client.calendar.events.list({
+        calendarId: "primary",
+        maxResults: 250,
+        timeMin: now.toISOString(),
+        orderBy: "startTime",
+        singleEvents: true,
+    });
+
+    // TODO: check response code
+    req.execute(function(res) {
+        if (res.items) {
+            var items = res.items.map(function(item) {
+                var startDate = new Date(item.start.dateTime);
+
+                return {
+                    title: item.summary,
+                    link: item.htmlLink,
+                    start: startDate.toISOString(),
+                    startRelative: moment(startDate).fromNow(),
+                };
+            });
+
+            app.ports.reminders.send(items);
+        }
+    });
 }
 
 

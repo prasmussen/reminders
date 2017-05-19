@@ -54,7 +54,7 @@ renderContent model =
         RequestFailed msg ->
           [ p [ class "has-text-centered" ] [ text msg ] ]
         Received (Just user) ->
-          authUserContent model user
+          authUserContent model
         Received Nothing ->
           anonUserContent
   in
@@ -71,13 +71,13 @@ anonUserContent =
      ]
   ]
 
-authUserContent model user =
+authUserContent model =
   [ Html.form []
       [ div [ class "field" ]
           [ label [ class "label" ]
               [ text "Query" ]
           , p [ class "control" ]
-              [ input [ attribute "autofocus" "", class "input", placeholder "Buy milk in 2 hours", attribute "required" "", type_ "text", onInput SetQuery, value model.query]
+              [ input [ attribute "autofocus" "", class "input", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query]
                   []
               ]
           , p [ class "control" ]
@@ -86,28 +86,37 @@ authUserContent model user =
               ]
           , p [ id "reminder-datetime" ] []
           , p [ id "reminder-relative-time" ] []
-          , div [ id "reminders" ]
-              [ table [ class "table" ]
-                  [ thead []
-                      [ tr []
-                          [ th []
-                              [ text "Title" ]
-                          , th []
-                              [ text "When" ]
-                          ]
-                      ]
-                  , tbody []
-                      [ tr []
-                          [ td []
-                              [ a [ href "https://www.google.com/calendar/event?eid=c3B2YjQybHRqOWRkY3NuNDNlOTU1aGV0NGsgcGV0dGVyLnJhc211c3NlbkBt" ]
-                                  [ text "buy milk" ]
-                              ]
-                          , td []
-                              [ text "in an hour" ]
-                          ]
-                      ]
-                  ]
-              ]
+          , renderReminders model
           ]
       ]
   ]
+
+renderReminders model =
+  case model.reminders of
+    NotAsked ->
+      p [] []
+    Loading ->
+      p [ class "has-text-centered" ] [ text "Loading reminders..." ]
+    RequestFailed msg ->
+      p [ class "has-text-centered" ] [ text msg ]
+    Received [] ->
+      p [ class "has-text-centered" ] [ text "No upcoming reminders" ]
+    Received reminders ->
+      let
+        reminderTr reminder =
+          tr []
+            [ td [] [ a [ href reminder.link ] [ text reminder.title ] ]
+            , td [] [ text reminder.startRelative ]
+            ]
+      in
+        div [ id "reminders" ]
+          [ table [ class "table" ]
+              [ thead []
+                  [ tr []
+                      [ th [] [ text "Title" ]
+                      , th [] [ text "When" ]
+                      ]
+                  ]
+              , tbody [] (List.map reminderTr reminders)
+              ]
+          ]

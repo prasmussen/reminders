@@ -8,6 +8,7 @@ type Msg
   | SignIn
   | SignOut
   | AuthChange (Maybe User)
+  | SetReminders (List Reminder)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -19,4 +20,10 @@ update msg model =
     SignOut ->
       model ! [Port.signOut True]
     AuthChange user ->
-      { model | user = Received user } ! []
+      case user of
+        Just _ ->
+          { model | user = Received user, reminders = Loading } ! [Port.requestReminders True]
+        Nothing ->
+          { model | user = Received user } ! []
+    SetReminders reminders ->
+      { model | reminders = Received reminders } ! []

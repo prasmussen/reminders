@@ -17,4 +17,5 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Port.authChange AuthChange
+    , Port.reminders SetReminders
     ]

@@ -48,44 +48,45 @@ renderContent model =
     content =
       case model.user of
         NotAsked ->
-          [ p [ class "has-text-centered" ] [ text "Initializing..." ] ]
+          [ renderSection "" <| p [ class "container has-text-centered" ] [ text "Initializing..." ] ]
         Loading ->
-          [ p [ class "has-text-centered" ] [ text "Loading..." ] ]
+          [ renderSection "" <| p [ class "container has-text-centered" ] [ text "Loading..." ] ]
         RequestFailed msg ->
-          [ p [ class "has-text-centered" ] [ text msg ] ]
+          [ renderSection "" <| p [ class "container has-text-centered" ] [ text msg ] ]
         Received (Just user) ->
           authUserContent model
         Received Nothing ->
           anonUserContent
   in
-    div [ class "columns" ]
-      [ div [ class "column is-half is-offset-one-quarter" ] content
-      ]
-
+    div [] content
 
 
 anonUserContent =
-  [ div [ class "content is-medium" ]
-     [ h1 [] [ text "Welcome to Reminders!" ]
-     , p [] [ text "After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders." ]
-     ]
-  ]
+  let
+    content = 
+      p [] [ text "After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders." ]
+  in
+    [ renderSection "Welcome to Reminders" content ]
 
 authUserContent model =
-  [ Html.form []
-      [ div [ class "field" ]
-          [ label [ class "label" ]
-              [ text "Query" ]
-          , p [ class "control" ]
-              [ input [ attribute "autofocus" "", class "input", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
-              ]
-          , p [ id "reminder-datetime" ] []
-          , p [ id "reminder-relative-time" ] []
-          , renderDraft model
-          , renderReminders model
-          ]
-      ]
+  [ renderSection "New reminder" (renderCompose model)
+  , hr [ class "is-marginless"] []
+  , renderSection "Upcoming reminders" (renderReminders model)
   ]
+
+renderCompose model =
+  Html.form []
+    [ div [ class "field" ]
+        [ label [ class "label" ]
+            [ text "Query" ]
+        , p [ class "control" ]
+            [ input [ attribute "autofocus" "", class "input", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
+            ]
+        , p [ id "reminder-datetime" ] []
+        , p [ id "reminder-relative-time" ] []
+        , renderDraft model
+        ]
+    ]
 
 renderReminders model =
   case model.reminders of
@@ -135,3 +136,13 @@ renderDraft model =
                   [ text "Save reminder" ]
               ]
           ]
+
+renderSection title content =
+  section [ class "section" ]
+      [ div [ class "container" ]
+          [ div [ class "heading" ]
+              [ h1 [ class "title" ] [ text title ]
+              ]
+          , content
+          ]
+      ]

@@ -10,6 +10,10 @@ p.control {
     height: 145px;
 }
 
+.section .heading .title {
+    margin-bottom: 20px;
+}
+
 #reminders {
-    margin-top: 60px;
+    /*margin-top: 60px;*/
 }

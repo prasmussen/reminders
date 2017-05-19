@@ -8290,34 +8290,65 @@ var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingP
 				_1: {ctor: '[]'}
 			}
 		}));
+var _user$project$App_Port$signIn = _elm_lang$core$Native_Platform.outgoingPort(
+	'signIn',
+	function (v) {
+		return v;
+	});
+var _user$project$App_Port$signOut = _elm_lang$core$Native_Platform.outgoingPort(
+	'signOut',
+	function (v) {
+		return v;
+	});
 
 var _user$project$App_Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'SetQuery') {
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Native_Utils.update(
+		switch (_p0.ctor) {
+			case 'SetQuery':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{query: _p0._0}),
+					{ctor: '[]'});
+			case 'SignIn':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
-					{query: _p0._0}),
-				{ctor: '[]'});
-		} else {
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Native_Utils.update(
+					{
+						ctor: '::',
+						_0: _user$project$App_Port$signIn(true),
+						_1: {ctor: '[]'}
+					});
+			case 'SignOut':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
-					{user: _p0._0}),
-				{ctor: '[]'});
+					{
+						ctor: '::',
+						_0: _user$project$App_Port$signOut(true),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{user: _p0._0}),
+					{ctor: '[]'});
 		}
 	});
 var _user$project$App_Update$AuthChange = function (a) {
 	return {ctor: 'AuthChange', _0: a};
 };
+var _user$project$App_Update$SignOut = {ctor: 'SignOut'};
+var _user$project$App_Update$SignIn = {ctor: 'SignIn'};
 var _user$project$App_Update$SetQuery = function (a) {
 	return {ctor: 'SetQuery', _0: a};
 };
 
-var _user$project$App_View$renderContent = function (model) {
+var _user$project$App_View$authUserContent = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -8332,21 +8363,13 @@ var _user$project$App_View$renderContent = function (model) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$class('column is-half is-offset-one-quarter'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$id('content'),
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$form,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$id('reminder-form'),
-							_1: {ctor: '[]'}
-						},
+						{ctor: '[]'},
 						{
 							ctor: '::',
 							_0: A2(
@@ -8391,24 +8414,20 @@ var _user$project$App_View$renderContent = function (model) {
 															_0: _elm_lang$html$Html_Attributes$class('input'),
 															_1: {
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$id('query'),
+																_0: _elm_lang$html$Html_Attributes$placeholder('Buy milk in 2 hours'),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$placeholder('Buy milk in 2 hours'),
+																	_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
+																		_0: _elm_lang$html$Html_Attributes$type_('text'),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$html$Html_Attributes$type_('text'),
+																			_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
 																			_1: {
 																				ctor: '::',
-																				_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
-																				_1: {
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$value(model.query),
-																					_1: {ctor: '[]'}
-																				}
+																				_0: _elm_lang$html$Html_Attributes$value(model.query),
+																				_1: {ctor: '[]'}
 																			}
 																		}
 																	}
@@ -8435,11 +8454,7 @@ var _user$project$App_View$renderContent = function (model) {
 														{
 															ctor: '::',
 															_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$id('create-reminder'),
-																_1: {ctor: '[]'}
-															}
+															_1: {ctor: '[]'}
 														},
 														{
 															ctor: '::',
@@ -8586,7 +8601,111 @@ var _user$project$App_View$renderContent = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$App_View$anonUserContent = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('columns'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('column is-half is-offset-one-quarter'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('content is-medium'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h1,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Welcome to Reminders!'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$p,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders.'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$App_View$renderContent = function (model) {
+	var _p0 = model.user;
+	if (_p0.ctor === 'Just') {
+		return _user$project$App_View$authUserContent(model);
+	} else {
+		return _user$project$App_View$anonUserContent(model);
+	}
+};
 var _user$project$App_View$renderNav = function (model) {
+	var authLink = function () {
+		var _p1 = model.user;
+		if (_p1.ctor === 'Just') {
+			return A2(
+				_elm_lang$html$Html$a,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignOut),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Sign out (',
+							A2(_elm_lang$core$Basics_ops['++'], _p1._0.email, ')'))),
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$a,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$SignIn),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Sign in'),
+					_1: {ctor: '[]'}
+				});
+		}
+	}();
 	return A2(
 		_elm_lang$html$Html$nav,
 		{
@@ -8670,30 +8789,11 @@ var _user$project$App_View$renderNav = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('nav-right nav-menu'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$id('nav-profile'),
-										_1: {ctor: '[]'}
-									}
+									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$a,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('nav-item is-tab'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$id('sign-out'),
-												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Sign out (petter.rasmussen@gmail.com)'),
-											_1: {ctor: '[]'}
-										}),
+									_0: authLink,
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}

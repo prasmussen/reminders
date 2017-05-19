@@ -1,5 +1,12 @@
 var app = Elm.Main.fullscreen();
 
+// Helper function to send current user to elm
+function sendUser(auth) {
+    var user = getUser(auth);
+    app.ports.authChange.send(user);
+}
+
+
 function getUser(auth) {
     var isAuthorized = auth.isSignedIn.get();
 
@@ -15,7 +22,6 @@ function getUser(auth) {
     };
 }
 
-
 gapi.load('client:auth2', function() {
     var SCOPE = 'https://www.googleapis.com/auth/calendar';
 
@@ -27,14 +33,23 @@ gapi.load('client:auth2', function() {
     }).then(function() {
         var auth = gapi.auth2.getAuthInstance();
 
-        // Listen for sign-in state changes.
-        auth.isSignedIn.listen(function(isAuthorized) {
-            var user = getUser(auth);
-            app.ports.authChange.send(user)
+        // Listen for sign in events from elm
+        app.ports.signIn.subscribe(function() {
+            auth.signIn();
         });
 
-        var user = getUser(auth);
-        app.ports.authChange.send(user)
+        // Listen for sign out events from elm
+        app.ports.signOut.subscribe(function() {
+            auth.signOut();
+        });
+
+        // Listen for sign-in state changes and send to elm
+        auth.isSignedIn.listen(function() {
+            sendUser(auth);
+        });
+
+        // Send initial user to elm
+        sendUser(auth);
     });
 
 });

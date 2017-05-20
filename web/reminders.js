@@ -66,7 +66,7 @@ function requestReminders() {
                 return {
                     title: item.summary,
                     link: item.htmlLink,
-                    start: startDate.toISOString(),
+                    start: humanDate(startDate),
                     startRelative: moment(startDate).fromNow(),
                 };
             });

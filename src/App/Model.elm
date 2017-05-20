@@ -8,6 +8,7 @@ type alias Model =
   , reminders : RemoteData String (List Reminder)
   , draft : Maybe Draft
   , showRelativeDate : Bool
+  , showRightMenuOnMobile : Bool
   }
 
 type alias User =
@@ -37,4 +38,5 @@ initModel =
   , reminders = NotAsked
   , draft = Nothing
   , showRelativeDate = True
+  , showRightMenuOnMobile = False
   }

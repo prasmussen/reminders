@@ -9249,10 +9249,10 @@ var _krisajenkins$remotedata$RemoteData$update = F2(
 		}
 	});
 
-var _user$project$App_Model$initModel = {query: '', user: _krisajenkins$remotedata$RemoteData$NotAsked, reminders: _krisajenkins$remotedata$RemoteData$NotAsked, draft: _elm_lang$core$Maybe$Nothing, showRelativeDate: true};
-var _user$project$App_Model$Model = F5(
-	function (a, b, c, d, e) {
-		return {query: a, user: b, reminders: c, draft: d, showRelativeDate: e};
+var _user$project$App_Model$initModel = {query: '', user: _krisajenkins$remotedata$RemoteData$NotAsked, reminders: _krisajenkins$remotedata$RemoteData$NotAsked, draft: _elm_lang$core$Maybe$Nothing, showRelativeDate: true, showRightMenuOnMobile: false};
+var _user$project$App_Model$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {query: a, user: b, reminders: c, draft: d, showRelativeDate: e, showRightMenuOnMobile: f};
 	});
 var _user$project$App_Model$User = function (a) {
 	return {email: a};
@@ -9437,7 +9437,9 @@ var _user$project$App_Update$update = F2(
 			case 'SignIn':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{showRightMenuOnMobile: false}),
 					{
 						ctor: '::',
 						_0: _user$project$App_Port$signIn(true),
@@ -9446,7 +9448,9 @@ var _user$project$App_Update$update = F2(
 			case 'SignOut':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{showRightMenuOnMobile: false}),
 					{
 						ctor: '::',
 						_0: _user$project$App_Port$signOut(true),
@@ -9501,6 +9505,13 @@ var _user$project$App_Update$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{showRelativeDate: !model.showRelativeDate}),
+					{ctor: '[]'});
+			case 'ToggleRightMenuOnMobile':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{showRightMenuOnMobile: !model.showRightMenuOnMobile}),
 					{ctor: '[]'});
 			case 'CreateReminder':
 				var _p4 = model.draft;
@@ -9584,6 +9595,7 @@ var _user$project$App_Update$CreateReminderSuccess = function (a) {
 	return {ctor: 'CreateReminderSuccess', _0: a};
 };
 var _user$project$App_Update$CreateReminder = {ctor: 'CreateReminder'};
+var _user$project$App_Update$ToggleRightMenuOnMobile = {ctor: 'ToggleRightMenuOnMobile'};
 var _user$project$App_Update$ToggleRelativeDate = {ctor: 'ToggleRelativeDate'};
 var _user$project$App_Update$SetDraft = function (a) {
 	return {ctor: 'SetDraft', _0: a};
@@ -9743,7 +9755,7 @@ var _user$project$App_View$renderDraft = function (model) {
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Save reminder'),
+									_0: _elm_lang$html$Html$text('Create Reminder'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -9963,7 +9975,7 @@ var _user$project$App_View$renderCompose = function (model) {
 										_0: _elm_lang$html$Html_Attributes$class('input is-large'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder('buy milk tomorrow 18:00'),
+											_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
 											_1: {
 												ctor: '::',
 												_0: A2(_elm_lang$html$Html_Attributes$attribute, 'required', ''),
@@ -10240,7 +10252,20 @@ var _user$project$App_View$renderNav = function (model) {
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$class('nav-toggle'),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$classList(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'is-active', _1: model.showRightMenuOnMobile},
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$ToggleRightMenuOnMobile),
+										_1: {ctor: '[]'}
+									}
+								}
 							},
 							{
 								ctor: '::',
@@ -10271,7 +10296,16 @@ var _user$project$App_View$renderNav = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('nav-right nav-menu'),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$classList(
+											{
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'is-active', _1: model.showRightMenuOnMobile},
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',

@@ -10,10 +10,15 @@ p.control {
     height: 145px;
 }
 
+.section {
+    padding-top: 20px;
+}
+
 .section .heading .title {
     margin-bottom: 20px;
+    font-size: 20px;
 }
 
 th.reminder-title {
-    width: 70%;
+    width: 65%;
 }

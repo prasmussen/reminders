@@ -13,6 +13,7 @@ type Msg
   | SetReminders (List Reminder)
   | SetDraft (Maybe Draft)
   | ToggleRelativeDate
+  | ToggleRightMenuOnMobile
   | CreateReminder
   | CreateReminderSuccess Reminder
   | PeriodicTasks Time
@@ -24,9 +25,9 @@ update msg model =
     SetQuery query ->
       { model | query = query } ! [Port.parseQuery query]
     SignIn ->
-      model ! [Port.signIn True]
+      { model | showRightMenuOnMobile = False } ! [Port.signIn True]
     SignOut ->
-      model ! [Port.signOut True]
+      { model | showRightMenuOnMobile = False } ! [Port.signOut True]
     AuthChange user ->
       case user of
         Just _ ->
@@ -39,6 +40,8 @@ update msg model =
       { model | draft = draft } ! []
     ToggleRelativeDate ->
       { model | showRelativeDate = not model.showRelativeDate } ! []
+    ToggleRightMenuOnMobile ->
+      { model | showRightMenuOnMobile = not model.showRightMenuOnMobile } ! []
     CreateReminder ->
       case model.draft of
         Just draft ->

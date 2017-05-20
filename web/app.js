@@ -9323,10 +9323,10 @@ var _user$project$App_Model$validateDraft = function (draft) {
 		return _elm_lang$core$Result$Ok(draft);
 	}
 };
-var _user$project$App_Model$initModel = {query: '', user: _krisajenkins$remotedata$RemoteData$NotAsked, reminders: _krisajenkins$remotedata$RemoteData$NotAsked, draft: _elm_lang$core$Maybe$Nothing, showRelativeDate: true, showRightMenuOnMobile: false};
-var _user$project$App_Model$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {query: a, user: b, reminders: c, draft: d, showRelativeDate: e, showRightMenuOnMobile: f};
+var _user$project$App_Model$initModel = {query: '', user: _krisajenkins$remotedata$RemoteData$NotAsked, reminders: _krisajenkins$remotedata$RemoteData$NotAsked, draft: _elm_lang$core$Maybe$Nothing, createReminderError: _elm_lang$core$Maybe$Nothing, showRelativeDate: true, showRightMenuOnMobile: false};
+var _user$project$App_Model$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {query: a, user: b, reminders: c, draft: d, createReminderError: e, showRelativeDate: f, showRightMenuOnMobile: g};
 	});
 var _user$project$App_Model$User = function (a) {
 	return {email: a};
@@ -9597,7 +9597,7 @@ var _user$project$App_Update$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{draft: _p0._0}),
+						{draft: _p0._0, createReminderError: _elm_lang$core$Maybe$Nothing}),
 					{ctor: '[]'});
 			case 'ToggleRelativeDate':
 				return A2(
@@ -9668,7 +9668,18 @@ var _user$project$App_Update$update = F2(
 			case 'CreateReminderFailed':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							createReminderError: _elm_lang$core$Maybe$Just(_p0._0)
+						}),
+					{ctor: '[]'});
+			case 'ResetCreateReminderError':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{createReminderError: _elm_lang$core$Maybe$Nothing}),
 					{ctor: '[]'});
 			default:
 				var _p7 = model.user;
@@ -9696,6 +9707,7 @@ var _user$project$App_Update$update = F2(
 var _user$project$App_Update$PeriodicTasks = function (a) {
 	return {ctor: 'PeriodicTasks', _0: a};
 };
+var _user$project$App_Update$ResetCreateReminderError = {ctor: 'ResetCreateReminderError'};
 var _user$project$App_Update$CreateReminderFailed = function (a) {
 	return {ctor: 'CreateReminderFailed', _0: a};
 };
@@ -9954,21 +9966,48 @@ var _user$project$App_View$renderReminders = function (model) {
 			}
 	}
 };
-var _user$project$App_View$renderDraft = function (draft) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('card'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
+var _user$project$App_View$renderDraftOrCreateError = F2(
+	function (draft, createError) {
+		var _p1 = createError;
+		if (_p1.ctor === 'Just') {
+			return A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('card-content'),
+					_0: _elm_lang$html$Html_Attributes$class('notification is-danger'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('delete'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('button'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$ResetCreateReminderError),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(_elm_lang$core$Basics_ops['++'], 'Failed to create reminder: ', _p1._0)),
+						_1: {ctor: '[]'}
+					}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('card'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -9977,71 +10016,81 @@ var _user$project$App_View$renderDraft = function (draft) {
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('content'),
+							_0: _elm_lang$html$Html_Attributes$class('card-content'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(draft.title),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$small,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(draft.start),
-											_1: {ctor: '[]'}
-										}),
+									_0: _elm_lang$html$Html_Attributes$class('content'),
 									_1: {ctor: '[]'}
-								}
-							}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(draft.title),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$small,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(draft.start),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$footer,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('card-footer'),
-						_1: {ctor: '[]'}
-					},
-					{
+					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$a,
+							_elm_lang$html$Html$footer,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('card-footer-item'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$CreateReminder),
-									_1: {ctor: '[]'}
-								}
+								_0: _elm_lang$html$Html_Attributes$class('card-footer'),
+								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Create Reminder'),
+								_0: A2(
+									_elm_lang$html$Html$a,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('card-footer-item'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$CreateReminder),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Create Reminder'),
+										_1: {ctor: '[]'}
+									}),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
+					}
+				});
+		}
+	});
 var _user$project$App_View$renderCompose = function (model) {
-	var _p1 = A2(_elm_lang$core$Maybe$map, _user$project$App_Model$validateDraft, model.draft);
-	if (_p1.ctor === 'Just') {
-		if (_p1._0.ctor === 'Ok') {
+	var _p2 = A2(_elm_lang$core$Maybe$map, _user$project$App_Model$validateDraft, model.draft);
+	if (_p2.ctor === 'Just') {
+		if (_p2._0.ctor === 'Ok') {
 			return A2(
 				_elm_lang$html$Html$form,
 				{
@@ -10127,7 +10176,7 @@ var _user$project$App_View$renderCompose = function (model) {
 								}),
 							_1: {
 								ctor: '::',
-								_0: _user$project$App_View$renderDraft(_p1._0._0),
+								_0: A2(_user$project$App_View$renderDraftOrCreateError, _p2._0._0, model.createReminderError),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -10224,7 +10273,7 @@ var _user$project$App_View$renderCompose = function (model) {
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(_p1._0._0),
+										_0: _elm_lang$html$Html$text(_p2._0._0),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -10234,8 +10283,8 @@ var _user$project$App_View$renderCompose = function (model) {
 				});
 		}
 	} else {
-		var _p2 = model.query;
-		if (_p2 === '') {
+		var _p3 = model.query;
+		if (_p3 === '') {
 			return A2(
 				_elm_lang$html$Html$form,
 				{ctor: '[]'},
@@ -10429,8 +10478,8 @@ var _user$project$App_View$anonUserContent = function () {
 }();
 var _user$project$App_View$renderContent = function (model) {
 	var content = function () {
-		var _p3 = model.user;
-		switch (_p3.ctor) {
+		var _p4 = model.user;
+		switch (_p4.ctor) {
 			case 'NotAsked':
 				return {
 					ctor: '::',
@@ -10486,13 +10535,13 @@ var _user$project$App_View$renderContent = function (model) {
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(_p3._0),
+								_0: _elm_lang$html$Html$text(_p4._0),
 								_1: {ctor: '[]'}
 							})),
 					_1: {ctor: '[]'}
 				};
 			default:
-				if (_p3._0.ctor === 'Just') {
+				if (_p4._0.ctor === 'Just') {
 					return _user$project$App_View$authUserContent(model);
 				} else {
 					return _user$project$App_View$anonUserContent;
@@ -10506,9 +10555,9 @@ var _user$project$App_View$renderContent = function (model) {
 };
 var _user$project$App_View$renderNav = function (model) {
 	var authLink = function () {
-		var _p4 = model.user;
-		if (_p4.ctor === 'Success') {
-			if (_p4._0.ctor === 'Just') {
+		var _p5 = model.user;
+		if (_p5.ctor === 'Success') {
+			if (_p5._0.ctor === 'Just') {
 				return A2(
 					_elm_lang$html$Html$a,
 					{
@@ -10526,7 +10575,7 @@ var _user$project$App_View$renderNav = function (model) {
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'Sign out (',
-								A2(_elm_lang$core$Basics_ops['++'], _p4._0._0.email, ')'))),
+								A2(_elm_lang$core$Basics_ops['++'], _p5._0._0.email, ')'))),
 						_1: {ctor: '[]'}
 					});
 			} else {

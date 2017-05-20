@@ -82,7 +82,7 @@ renderCompose model =
             [ input [ class "input is-large is-success", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query ] []
             , span [ class "icon is-small is-right" ] [ i [class "fa fa-check"] [] ]
             ]
-          , renderDraft draft
+          , renderDraftOrCreateError draft model.createReminderError
           ]
         ]
     Just (Err error) ->
@@ -115,20 +115,27 @@ renderCompose model =
               ]
             ]
 
-renderDraft draft =
-  div [ class "card" ]
-      [ div [ class "card-content" ]
+renderDraftOrCreateError draft createError =
+  case createError of
+    Just error ->
+      div [ class "notification is-danger" ]
+        [ button [ class "delete", type_ "button", onClick ResetCreateReminderError ] []
+        , text ("Failed to create reminder: " ++ error)
+        ]
+    Nothing ->
+      div [ class "card" ]
+        [ div [ class "card-content" ]
           [ div [ class "content" ]
-              [ text draft.title
-              , br [] []
-              , small [] [ text draft.start ]
-              ]
+            [ text draft.title
+            , br [] []
+            , small [] [ text draft.start ]
+            ]
           ]
-      , footer [ class "card-footer" ]
+        , footer [ class "card-footer" ]
           [ a [ class "card-footer-item", onClick CreateReminder ]
-              [ text "Create Reminder" ]
+            [ text "Create Reminder" ]
           ]
-      ]
+        ]
 
 renderReminders model =
   case model.reminders of

@@ -19,6 +19,7 @@ type Msg
   | CreateReminder
   | CreateReminderSuccess Reminder
   | CreateReminderFailed String
+  | ResetCreateReminderError
   | PeriodicTasks Time
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -43,7 +44,7 @@ update msg model =
     ListRemindersFailed error ->
       { model | reminders = Failure error } ! []
     SetDraft draft ->
-      { model | draft = draft } ! []
+      { model | draft = draft, createReminderError = Nothing } ! []
     ToggleRelativeDate ->
       { model | showRelativeDate = not model.showRelativeDate } ! []
     ToggleRightMenuOnMobile ->
@@ -66,8 +67,9 @@ update msg model =
       in
         { model | query = "", draft = Nothing, reminders = newReminders } ! []
     CreateReminderFailed error ->
-      -- TODO: handle error
-      model ! []
+      { model | createReminderError = Just error } ! []
+    ResetCreateReminderError ->
+      { model | createReminderError = Nothing } ! []
     PeriodicTasks time ->
       case model.user of
         Success (Just user) ->

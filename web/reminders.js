@@ -1,22 +1,22 @@
 var app = Elm.Main.fullscreen();
 
-// Listen for request user requests from elm
+// Listen for getUser requests from elm
 app.ports.getUser.subscribe(function() {
     gapi.load('client:auth2', gapiInit);
 });
 
-// Listen for reminder list requests from elm
+// Listen for listReminders requests from elm
 app.ports.listReminders.subscribe(function() {
     listReminders();
 });
 
-// Listen for parse query requests from elm
+// Listen for parseQuery requests from elm
 app.ports.parseQuery.subscribe(function(query) {
     var draft = parseQuery(query);
     app.ports.draft.send(draft);
 });
 
-// Listen for create reminder requests from elm
+// Listen for createReminder requests from elm
 app.ports.createReminder.subscribe(function(draft) {
     createReminder(draft);
 });

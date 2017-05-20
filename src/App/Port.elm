@@ -9,6 +9,7 @@ port listRemindersSuccess : (List Reminder -> msg) -> Sub msg
 port listRemindersFailed : (String -> msg) -> Sub msg
 port createReminderSuccess : (Reminder -> msg) -> Sub msg
 port createReminderFailed : (String -> msg) -> Sub msg
+port getUserFailed : (String -> msg) -> Sub msg
 
 -- Outgoing ports
 port listReminders : Bool -> Cmd msg

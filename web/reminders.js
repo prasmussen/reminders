@@ -48,6 +48,8 @@ function gapiInit() {
 
         // Send initial user to elm
         sendUser(auth);
+    }, function(res) {
+        app.ports.getUserFailed.send(res.details);
     });
 
 }

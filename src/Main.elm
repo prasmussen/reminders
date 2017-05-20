@@ -24,5 +24,6 @@ subscriptions model =
     , Port.listRemindersFailed ListRemindersFailed
     , Port.createReminderSuccess CreateReminderSuccess
     , Port.createReminderFailed CreateReminderFailed
+    , Port.getUserFailed GetUserFailed
     , Time.every (Time.minute * 1) PeriodicTasks
     ]

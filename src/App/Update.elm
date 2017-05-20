@@ -10,6 +10,7 @@ type Msg
   | SignIn
   | SignOut
   | AuthChange (Maybe User)
+  | GetUserFailed String
   | ListRemindersSuccess (List Reminder)
   | ListRemindersFailed String
   | SetDraft (Maybe Draft)
@@ -35,6 +36,8 @@ update msg model =
           { model | user = Success user, reminders = Loading } ! [Port.listReminders True]
         Nothing ->
           { model | user = Success user } ! []
+    GetUserFailed error ->
+      { model | user = Failure error } ! []
     ListRemindersSuccess reminders ->
       { model | reminders = Success reminders } ! []
     ListRemindersFailed error ->

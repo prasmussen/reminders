@@ -9468,6 +9468,7 @@ var _user$project$App_Port$createReminderSuccess = _elm_lang$core$Native_Platfor
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string)));
 var _user$project$App_Port$createReminderFailed = _elm_lang$core$Native_Platform.incomingPort('createReminderFailed', _elm_lang$core$Json_Decode$string);
+var _user$project$App_Port$getUserFailed = _elm_lang$core$Native_Platform.incomingPort('getUserFailed', _elm_lang$core$Json_Decode$string);
 var _user$project$App_Port$listReminders = _elm_lang$core$Native_Platform.outgoingPort(
 	'listReminders',
 	function (v) {
@@ -9564,6 +9565,15 @@ var _user$project$App_Update$update = F2(
 							}),
 						{ctor: '[]'});
 				}
+			case 'GetUserFailed':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							user: _krisajenkins$remotedata$RemoteData$Failure(_p0._0)
+						}),
+					{ctor: '[]'});
 			case 'ListRemindersSuccess':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -9703,6 +9713,9 @@ var _user$project$App_Update$ListRemindersFailed = function (a) {
 };
 var _user$project$App_Update$ListRemindersSuccess = function (a) {
 	return {ctor: 'ListRemindersSuccess', _0: a};
+};
+var _user$project$App_Update$GetUserFailed = function (a) {
+	return {ctor: 'GetUserFailed', _0: a};
 };
 var _user$project$App_Update$AuthChange = function (a) {
 	return {ctor: 'AuthChange', _0: a};
@@ -10697,8 +10710,12 @@ var _user$project$Main$subscriptions = function (model) {
 								_0: _user$project$App_Port$createReminderFailed(_user$project$App_Update$CreateReminderFailed),
 								_1: {
 									ctor: '::',
-									_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$PeriodicTasks),
-									_1: {ctor: '[]'}
+									_0: _user$project$App_Port$getUserFailed(_user$project$App_Update$GetUserFailed),
+									_1: {
+										ctor: '::',
+										_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$PeriodicTasks),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}

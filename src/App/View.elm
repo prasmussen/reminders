@@ -65,7 +65,7 @@ renderContent model =
 anonUserContent =
   let
     content = 
-      p [] [ text "After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will also see a list of all upcoming reminders." ]
+      p [] [ text "After signing in with your google account you will be able to easily create reminders in you google calendar by entering text into a text field. The title and time is extracted from the text using a natural language date parser. You will receive an email at the time of the reminder. A list of upcoming reminders is also shown." ]
   in
     [ renderSection "Welcome to Reminders" content ]
 

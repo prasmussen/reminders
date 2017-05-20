@@ -23,13 +23,11 @@ app.ports.createReminder.subscribe(function(draft) {
 
 
 function gapiInit() {
-    var SCOPE = 'https://www.googleapis.com/auth/calendar';
-
     gapi.client.init({
         'apiKey': 'AIzaSyAYk1JO0wu3UxAbYmeDxLclOA2psEwLQZE',
         'discoveryDocs': ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
         'clientId': '853474051422-rbvibfhir17apk19nq9vf3j8sshdo81f.apps.googleusercontent.com',
-        'scope': SCOPE
+        'scope': 'https://www.googleapis.com/auth/calendar',
     }).then(function() {
         var auth = gapi.auth2.getAuthInstance();
 

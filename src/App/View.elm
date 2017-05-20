@@ -74,27 +74,49 @@ authUserContent model =
   ]
 
 renderCompose model =
-  let
-    validateAndRenderDraft =
-      case (Maybe.map validateDraft model.draft) of
-        Just (Ok draft) ->
-          renderDraft draft
-        Just (Err error) ->
-          p [ class "help is-danger"] [ text error ]
-        Nothing ->
-          div [ id "draft" ] []
-  in
-    Html.form [ onSubmit CreateReminder ]
-      [ div [ class "field" ]
-          [ p [ class "control" ]
-              [ input [ class "input is-large", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query] []
-              ]
-          , validateAndRenderDraft
+  case (Maybe.map validateDraft model.draft) of
+    Just (Ok draft) ->
+      Html.form [ onSubmit CreateReminder ]
+        [ div [ class "field" ]
+          [ p [ class "control has-icons-right" ]
+            [ input [ class "input is-large is-success", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query ] []
+            , span [ class "icon is-small is-right" ] [ i [class "fa fa-check"] [] ]
+            ]
+          , renderDraft draft
           ]
-      ]
+        ]
+    Just (Err error) ->
+      Html.form []
+        [ div [ class "field" ]
+          [ p [ class "control has-icons-right" ]
+            [ input [ class "input is-large is-danger", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query ] []
+            , span [ class "icon is-small is-right" ] [ i [class "fa fa-warning"] [] ]
+            ]
+          , p [ class "help is-danger"] [ text error ]
+          ]
+        ]
+    Nothing ->
+      case model.query of
+        "" ->
+          Html.form []
+            [ div [ class "field" ]
+              [ p [ class "control" ]
+                [ input [ class "input is-large", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query ] []
+                ]
+              ]
+            ]
+        _ ->
+          Html.form []
+            [ div [ class "field" ]
+              [ p [ class "control has-icons-right" ]
+                [ input [ class "input is-large", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query ] []
+                , span [ class "icon is-small is-right" ] [ i [class "fa fa-warning"] [] ]
+                ]
+              ]
+            ]
 
 renderDraft draft =
-  div [ class "card", id "draft" ]
+  div [ class "card" ]
       [ div [ class "card-content" ]
           [ div [ class "content" ]
               [ text draft.title

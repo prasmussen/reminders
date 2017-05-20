@@ -9921,11 +9921,7 @@ var _user$project$App_View$renderDraft = function (draft) {
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$class('card'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$id('draft'),
-				_1: {ctor: '[]'}
-			}
+			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
@@ -10004,105 +10000,350 @@ var _user$project$App_View$renderDraft = function (draft) {
 		});
 };
 var _user$project$App_View$renderCompose = function (model) {
-	var validateAndRenderDraft = function () {
-		var _p1 = A2(_elm_lang$core$Maybe$map, _user$project$App_Model$validateDraft, model.draft);
-		if (_p1.ctor === 'Just') {
-			if (_p1._0.ctor === 'Ok') {
-				return _user$project$App_View$renderDraft(_p1._0._0);
-			} else {
-				return A2(
-					_elm_lang$html$Html$p,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('help is-danger'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p1._0._0),
-						_1: {ctor: '[]'}
-					});
-			}
-		} else {
+	var _p1 = A2(_elm_lang$core$Maybe$map, _user$project$App_Model$validateDraft, model.draft);
+	if (_p1.ctor === 'Just') {
+		if (_p1._0.ctor === 'Ok') {
 			return A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$form,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$id('draft'),
-					_1: {ctor: '[]'}
-				},
-				{ctor: '[]'});
-		}
-	}();
-	return A2(
-		_elm_lang$html$Html$form,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onSubmit(_user$project$App_Update$CreateReminder),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('field'),
+					_0: _elm_lang$html$Html_Events$onSubmit(_user$project$App_Update$CreateReminder),
 					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$p,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('control'),
+							_0: _elm_lang$html$Html_Attributes$class('field'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$input,
+								_elm_lang$html$Html$p,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('input is-large'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
-										_1: {
+									_0: _elm_lang$html$Html_Attributes$class('control has-icons-right'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$type_('text'),
+											_0: _elm_lang$html$Html_Attributes$class('input is-large is-success'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$required(true),
+												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$autofocus(true),
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+														_0: _elm_lang$html$Html_Attributes$required(true),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$value(model.query),
-															_1: {ctor: '[]'}
+															_0: _elm_lang$html$Html_Attributes$autofocus(true),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value(model.query),
+																	_1: {ctor: '[]'}
+																}
+															}
 														}
 													}
 												}
 											}
-										}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('icon is-small is-right'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$i,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('fa fa-check'),
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
 									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _user$project$App_View$renderDraft(_p1._0._0),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$form,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('field'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('control has-icons-right'),
+									_1: {ctor: '[]'}
 								},
-								{ctor: '[]'}),
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('input is-large is-danger'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$required(true),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$autofocus(true),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value(model.query),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('icon is-small is-right'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$i,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('fa fa-warning'),
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$p,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('help is-danger'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(_p1._0._0),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				});
+		}
+	} else {
+		var _p2 = model.query;
+		if (_p2 === '') {
+			return A2(
+				_elm_lang$html$Html$form,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('field'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('control'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('input is-large'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$required(true),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$autofocus(true),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value(model.query),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
 							_1: {ctor: '[]'}
 						}),
-					_1: {
-						ctor: '::',
-						_0: validateAndRenderDraft,
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$form,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('field'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('control has-icons-right'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('input is-large'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('buy milk on monday 18:00'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$required(true),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$autofocus(true),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onInput(_user$project$App_Update$SetQuery),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$value(model.query),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('icon is-small is-right'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$i,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('fa fa-warning'),
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		}
+	}
 };
 var _user$project$App_View$authUserContent = function (model) {
 	return {
@@ -10149,8 +10390,8 @@ var _user$project$App_View$anonUserContent = function () {
 }();
 var _user$project$App_View$renderContent = function (model) {
 	var content = function () {
-		var _p2 = model.user;
-		switch (_p2.ctor) {
+		var _p3 = model.user;
+		switch (_p3.ctor) {
 			case 'NotAsked':
 				return {
 					ctor: '::',
@@ -10206,13 +10447,13 @@ var _user$project$App_View$renderContent = function (model) {
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(_p2._0),
+								_0: _elm_lang$html$Html$text(_p3._0),
 								_1: {ctor: '[]'}
 							})),
 					_1: {ctor: '[]'}
 				};
 			default:
-				if (_p2._0.ctor === 'Just') {
+				if (_p3._0.ctor === 'Just') {
 					return _user$project$App_View$authUserContent(model);
 				} else {
 					return _user$project$App_View$anonUserContent;
@@ -10226,9 +10467,9 @@ var _user$project$App_View$renderContent = function (model) {
 };
 var _user$project$App_View$renderNav = function (model) {
 	var authLink = function () {
-		var _p3 = model.user;
-		if (_p3.ctor === 'Success') {
-			if (_p3._0.ctor === 'Just') {
+		var _p4 = model.user;
+		if (_p4.ctor === 'Success') {
+			if (_p4._0.ctor === 'Just') {
 				return A2(
 					_elm_lang$html$Html$a,
 					{
@@ -10246,7 +10487,7 @@ var _user$project$App_View$renderNav = function (model) {
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'Sign out (',
-								A2(_elm_lang$core$Basics_ops['++'], _p3._0._0.email, ')'))),
+								A2(_elm_lang$core$Basics_ops['++'], _p4._0._0.email, ')'))),
 						_1: {ctor: '[]'}
 					});
 			} else {

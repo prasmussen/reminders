@@ -1,9 +1,11 @@
 module App.Model exposing (..)
 
+import RemoteData exposing (RemoteData(..))
+
 type alias Model =
   { query : String
-  , user : RemoteData (Maybe User)
-  , reminders : RemoteData (List Reminder)
+  , user : RemoteData String (Maybe User)
+  , reminders : RemoteData String (List Reminder)
   , draft : Maybe Draft
   , showRelativeDate : Bool
   }
@@ -14,6 +16,8 @@ type alias User =
 
 type alias Draft =
   { title : String
+  , startDate : String
+  , endDate : String
   , start : String
   , end : String
   }
@@ -21,15 +25,10 @@ type alias Draft =
 type alias Reminder =
   { title : String
   , link : String
+  , startDate : String
   , start : String
   , startRelative : String
   }
-
-type RemoteData received
-  = NotAsked
-  | Loading
-  | RequestFailed String
-  | Received received
 
 initModel : Model
 initModel =

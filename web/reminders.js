@@ -1,5 +1,6 @@
 var app = Elm.Main.fullscreen();
 
+// Listen for request user requests from elm
 app.ports.requestUser.subscribe(function() {
     gapi.load('client:auth2', gapiInit);
 });
@@ -9,10 +10,17 @@ app.ports.requestReminders.subscribe(function() {
     requestReminders();
 });
 
+// Listen for parse query requests from elm
 app.ports.parseQuery.subscribe(function(query) {
     var draft = parseQuery(query);
     app.ports.draft.send(draft);
 });
+
+// Listen for create reminder requests from elm
+app.ports.createReminder.subscribe(function(draft) {
+    createReminder(draft);
+});
+
 
 function gapiInit() {
     var SCOPE = 'https://www.googleapis.com/auth/calendar';
@@ -60,20 +68,22 @@ function requestReminders() {
     // TODO: check response code
     req.execute(function(res) {
         if (res.items) {
-            var items = res.items.map(function(item) {
-                var startDate = new Date(item.start.dateTime);
-
-                return {
-                    title: item.summary,
-                    link: item.htmlLink,
-                    start: humanDate(startDate),
-                    startRelative: moment(startDate).fromNow(),
-                };
-            });
-
+            var items = res.items.map(formatReminder);
             app.ports.reminders.send(items);
         }
     });
+}
+
+function formatReminder(item) {
+    var startDate = new Date(item.start.dateTime);
+
+    return {
+        title: item.summary,
+        link: item.htmlLink,
+        startDate: startDate.toISOString(),
+        start: humanDate(startDate),
+        startRelative: moment(startDate).fromNow(),
+    };
 }
 
 function parseQuery(query) {
@@ -97,10 +107,41 @@ function parseQuery(query) {
     }
 
     return {
-        "title": title,
-        "start": humanDate(startDate),
-        "end": humanDate(endDate),
+        title: title,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        start: humanDate(startDate),
+        end: humanDate(endDate),
     };
+}
+
+function createReminder(draft) {
+    var event = {
+        summary: draft.title,
+        start: {
+            dateTime: draft.startDate,
+        },
+        end: {
+            dateTime: draft.endDate,
+        },
+        reminders: {
+            useDefault: false,
+            overrides: [
+                {method: 'email', minutes: 0},
+                {method: 'popup', minutes: 0},
+            ],
+        },
+    };
+
+    var request = gapi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+    });
+
+    request.execute(function(event) {
+        var reminder = formatReminder(event);
+        app.ports.createReminderSuccess.send(reminder);
+    });
 }
 
 function humanDate(dt) {

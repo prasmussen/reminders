@@ -1,5 +1,6 @@
 module App.View exposing (..)
 
+import RemoteData exposing (RemoteData(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -18,9 +19,9 @@ renderNav model =
   let
     authLink =
       case model.user of
-        Received (Just user) ->
+        Success (Just user) ->
           a [ class "nav-item is-tab", onClick SignOut ] [ text <| "Sign out (" ++ user.email ++ ")" ]
-        Received Nothing ->
+        Success Nothing ->
           a [ class "nav-item is-tab", onClick SignIn ] [ text "Sign in" ]
         _ ->
           span [] []
@@ -51,11 +52,11 @@ renderContent model =
           [ renderSection "" <| p [ class "container has-text-centered" ] [ text "Initializing..." ] ]
         Loading ->
           [ renderSection "" <| p [ class "container has-text-centered" ] [ text "Loading..." ] ]
-        RequestFailed msg ->
+        Failure msg ->
           [ renderSection "" <| p [ class "container has-text-centered" ] [ text msg ] ]
-        Received (Just user) ->
+        Success (Just user) ->
           authUserContent model
-        Received Nothing ->
+        Success Nothing ->
           anonUserContent
   in
     div [] content
@@ -75,7 +76,7 @@ authUserContent model =
   ]
 
 renderCompose model =
-  Html.form []
+  Html.form [ onSubmit CreateReminder ]
     [ div [ class "field" ]
         [ p [ class "control" ]
             [ input [ attribute "autofocus" "", class "input is-large", placeholder "buy milk tomorrow 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
@@ -92,11 +93,11 @@ renderReminders model =
       p [] []
     Loading ->
       p [ class "has-text-centered" ] [ text "Loading reminders..." ]
-    RequestFailed msg ->
+    Failure msg ->
       p [ class "has-text-centered" ] [ text msg ]
-    Received [] ->
+    Success [] ->
       p [ class "has-text-centered" ] [ text "No upcoming reminders" ]
-    Received reminders ->
+    Success reminders ->
       let
         when reminder =
           if model.showRelativeDate then
@@ -135,7 +136,7 @@ renderDraft model =
                   ]
               ]
           , footer [ class "card-footer" ]
-              [ a [ class "card-footer-item" ]
+              [ a [ class "card-footer-item", onClick CreateReminder ]
                   [ text "Save reminder" ]
               ]
           ]

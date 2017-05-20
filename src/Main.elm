@@ -1,4 +1,5 @@
 import Html
+import RemoteData exposing (RemoteData(..))
 import App.Model exposing (..)
 import App.Update exposing (..)
 import App.View exposing (..)
@@ -19,4 +20,5 @@ subscriptions model =
     [ Port.authChange AuthChange
     , Port.reminders SetReminders
     , Port.draft SetDraft
+    , Port.createReminderSuccess CreateReminderSuccess
     ]

@@ -63,6 +63,7 @@ function requestReminders() {
         timeMin: now.toISOString(),
         orderBy: "startTime",
         singleEvents: true,
+        privateExtendedProperty: "isReminder=true"
     });
 
     // TODO: check response code
@@ -130,6 +131,11 @@ function createReminder(draft) {
                 {method: 'email', minutes: 0},
                 {method: 'popup', minutes: 0},
             ],
+        },
+        extendedProperties: {
+            private: {
+                isReminder: true,
+            },
         },
     };
 

@@ -12,6 +12,7 @@ p.control {
 
 .section {
     padding-top: 20px;
+    min-height: 320px;
 }
 
 .section .heading .title {

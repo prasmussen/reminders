@@ -43,10 +43,10 @@ update msg model =
     ToggleRightMenuOnMobile ->
       { model | showRightMenuOnMobile = not model.showRightMenuOnMobile } ! []
     CreateReminder ->
-      case model.draft of
-        Just draft ->
+      case (Maybe.map validateDraft model.draft) of
+        Just (Ok draft) ->
           model ! [Port.createReminder draft]
-        Nothing ->
+        _ ->
           model ! []
     CreateReminderSuccess reminder ->
       let

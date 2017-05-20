@@ -1,6 +1,7 @@
 module App.View exposing (..)
 
 import RemoteData exposing (RemoteData(..))
+import Date
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -73,16 +74,39 @@ authUserContent model =
   ]
 
 renderCompose model =
-  Html.form [ onSubmit CreateReminder ]
-    [ div [ class "field" ]
-        [ p [ class "control" ]
-            [ input [ attribute "autofocus" "", class "input is-large", placeholder "buy milk on monday 18:00", attribute "required" "", type_ "text", onInput SetQuery, value model.query] []
-            ]
-        , p [ id "reminder-datetime" ] []
-        , p [ id "reminder-relative-time" ] []
-        , renderDraft model
-        ]
-    ]
+  let
+    validateAndRenderDraft =
+      case (Maybe.map validateDraft model.draft) of
+        Just (Ok draft) ->
+          renderDraft draft
+        Just (Err error) ->
+          p [ class "help is-danger"] [ text error ]
+        Nothing ->
+          div [ id "draft" ] []
+  in
+    Html.form [ onSubmit CreateReminder ]
+      [ div [ class "field" ]
+          [ p [ class "control" ]
+              [ input [ class "input is-large", placeholder "buy milk on monday 18:00", type_ "text", required True, autofocus True, onInput SetQuery, value model.query] []
+              ]
+          , validateAndRenderDraft
+          ]
+      ]
+
+renderDraft draft =
+  div [ class "card", id "draft" ]
+      [ div [ class "card-content" ]
+          [ div [ class "content" ]
+              [ text draft.title
+              , br [] []
+              , small [] [ text draft.start ]
+              ]
+          ]
+      , footer [ class "card-footer" ]
+          [ a [ class "card-footer-item", onClick CreateReminder ]
+              [ text "Create Reminder" ]
+          ]
+      ]
 
 renderReminders model =
   case model.reminders of
@@ -116,25 +140,6 @@ renderReminders model =
                       ]
                   ]
               , tbody [] (List.map reminderTr reminders)
-              ]
-          ]
-
-renderDraft model =
-  case model.draft of
-    Nothing ->
-      div [ id "draft" ] []
-    Just draft ->
-      div [ class "card", id "draft" ]
-          [ div [ class "card-content" ]
-              [ div [ class "content" ]
-                  [ text draft.title
-                  , br [] []
-                  , small [] [ text draft.start ]
-                  ]
-              ]
-          , footer [ class "card-footer" ]
-              [ a [ class "card-footer-item", onClick CreateReminder ]
-                  [ text "Create Reminder" ]
               ]
           ]
 

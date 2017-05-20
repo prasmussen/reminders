@@ -107,12 +107,15 @@ function parseQuery(query) {
         title = query;
     }
 
+    var staleStartDate = startDate < new Date();
+
     return {
         title: title,
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
         start: humanDate(startDate),
         end: humanDate(endDate),
+        staleStartDate: staleStartDate,
     };
 }
 

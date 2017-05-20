@@ -21,6 +21,7 @@ type alias Draft =
   , endDate : String
   , start : String
   , end : String
+  , staleStartDate : Bool
   }
 
 type alias Reminder =
@@ -40,3 +41,11 @@ initModel =
   , showRelativeDate = True
   , showRightMenuOnMobile = False
   }
+
+validateDraft : Draft -> Result String Draft
+validateDraft draft =
+  case draft.staleStartDate of
+    True ->
+      Err "Reminder must be in the future"
+    False ->
+      Ok draft

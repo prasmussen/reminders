@@ -149,7 +149,7 @@ renderReminders model =
             reminder.start
         reminderTr reminder =
           tr []
-            [ td [] [ a [ href reminder.link ] [ text reminder.title ] ]
+            [ td [] [ a [ href reminder.link, target "_blank" ] [ text reminder.title ] ]
             , td [] [ a [ onClick ToggleRelativeDate ] [ text (when reminder) ] ]
             ]
       in

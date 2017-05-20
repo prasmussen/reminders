@@ -1,5 +1,6 @@
 module App.Update exposing (..)
 
+import Time exposing (Time)
 import RemoteData exposing (RemoteData(..))
 import App.Model exposing (..)
 import App.Port as Port
@@ -14,6 +15,8 @@ type Msg
   | ToggleRelativeDate
   | CreateReminder
   | CreateReminderSuccess Reminder
+  | RequestReminders Time
+  | ParseQuery Time
   -- TODO: Add CreateReminderFailed
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -54,3 +57,7 @@ update msg model =
               Success [reminder]
       in
         { model | query = "", draft = Nothing, reminders = newReminders } ! []
+    RequestReminders now ->
+      model ! [Port.requestReminders True]
+    ParseQuery now ->
+      model ! [Port.parseQuery model.query]

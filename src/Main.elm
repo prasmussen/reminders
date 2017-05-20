@@ -19,7 +19,8 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Port.authChange AuthChange
-    , Port.reminders SetReminders
+    , Port.listRemindersSuccess ListRemindersSuccess
+    , Port.listRemindersFailed ListRemindersFailed
     , Port.draft SetDraft
     , Port.createReminderSuccess CreateReminderSuccess
     , Time.every (Time.minute * 1) PeriodicTasks

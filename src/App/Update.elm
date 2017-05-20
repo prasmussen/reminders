@@ -10,7 +10,8 @@ type Msg
   | SignIn
   | SignOut
   | AuthChange (Maybe User)
-  | SetReminders (List Reminder)
+  | ListRemindersSuccess (List Reminder)
+  | ListRemindersFailed String
   | SetDraft (Maybe Draft)
   | ToggleRelativeDate
   | ToggleRightMenuOnMobile
@@ -31,11 +32,13 @@ update msg model =
     AuthChange user ->
       case user of
         Just _ ->
-          { model | user = Success user, reminders = Loading } ! [Port.requestReminders True]
+          { model | user = Success user, reminders = Loading } ! [Port.listReminders True]
         Nothing ->
           { model | user = Success user } ! []
-    SetReminders reminders ->
+    ListRemindersSuccess reminders ->
       { model | reminders = Success reminders } ! []
+    ListRemindersFailed error ->
+      { model | reminders = Failure error } ! []
     SetDraft draft ->
       { model | draft = draft } ! []
     ToggleRelativeDate ->
@@ -62,6 +65,6 @@ update msg model =
     PeriodicTasks time ->
       case model.user of
         Success (Just user) ->
-          model ! [Port.requestReminders True, Port.parseQuery model.query]
+          model ! [Port.listReminders True, Port.parseQuery model.query]
         _ ->
           model ! []

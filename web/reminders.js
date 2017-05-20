@@ -6,8 +6,8 @@ app.ports.requestUser.subscribe(function() {
 });
 
 // Listen for reminder list requests from elm
-app.ports.requestReminders.subscribe(function() {
-    requestReminders();
+app.ports.listReminders.subscribe(function() {
+    listReminders();
 });
 
 // Listen for parse query requests from elm
@@ -52,7 +52,7 @@ function gapiInit() {
 
 }
 
-function requestReminders() {
+function listReminders() {
     var now = new Date();
 
     var req = gapi.client.calendar.events.list({
@@ -65,11 +65,11 @@ function requestReminders() {
     });
 
     // TODO: check response code
-    req.execute(function(res) {
-        if (res.items) {
-            var items = res.items.map(formatReminder);
-            app.ports.reminders.send(items);
-        }
+    req.then(function(res) {
+        var items = res.result.items.map(formatReminder);
+        app.ports.listRemindersSuccess.send(items);
+    }, function(res) {
+        app.ports.listRemindersFailed.send(res.result.error.message);
     });
 }
 

@@ -145,9 +145,11 @@ function createReminder(draft) {
         'resource': event
     });
 
-    request.execute(function(event) {
-        var reminder = formatReminder(event);
+    request.then(function(res) {
+        var reminder = formatReminder(res.result);
         app.ports.createReminderSuccess.send(reminder);
+    }, function(res) {
+        app.ports.createReminderFailed.send(res.result.error.message)
     });
 }
 

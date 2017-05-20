@@ -17,8 +17,8 @@ type Msg
   | ToggleRightMenuOnMobile
   | CreateReminder
   | CreateReminderSuccess Reminder
+  | CreateReminderFailed String
   | PeriodicTasks Time
-  -- TODO: Add CreateReminderFailed
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -62,6 +62,9 @@ update msg model =
               Success [reminder]
       in
         { model | query = "", draft = Nothing, reminders = newReminders } ! []
+    CreateReminderFailed error ->
+      -- TODO: handle error
+      model ! []
     PeriodicTasks time ->
       case model.user of
         Success (Just user) ->

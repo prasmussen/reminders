@@ -9,7 +9,7 @@ type Msg
   = SetQuery String
   | SignIn
   | SignOut
-  | AuthChange (Maybe User)
+  | GetUserSuccess (Maybe User)
   | GetUserFailed String
   | ListRemindersSuccess (List Reminder)
   | ListRemindersFailed String
@@ -30,7 +30,7 @@ update msg model =
       { model | showRightMenuOnMobile = False } ! [Port.signIn True]
     SignOut ->
       { model | showRightMenuOnMobile = False } ! [Port.signOut True]
-    AuthChange user ->
+    GetUserSuccess user ->
       case user of
         Just _ ->
           { model | user = Success user, reminders = Loading } ! [Port.listReminders True]

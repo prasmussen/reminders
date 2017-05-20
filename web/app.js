@@ -9340,27 +9340,6 @@ var _user$project$App_Model$Reminder = F5(
 		return {title: a, link: b, startDate: c, start: d, startRelative: e};
 	});
 
-var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingPort(
-	'authChange',
-	_elm_lang$core$Json_Decode$oneOf(
-		{
-			ctor: '::',
-			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Json_Decode$map,
-					_elm_lang$core$Maybe$Just,
-					A2(
-						_elm_lang$core$Json_Decode$andThen,
-						function (email) {
-							return _elm_lang$core$Json_Decode$succeed(
-								{email: email});
-						},
-						A2(_elm_lang$core$Json_Decode$field, 'email', _elm_lang$core$Json_Decode$string))),
-				_1: {ctor: '[]'}
-			}
-		}));
 var _user$project$App_Port$draft = _elm_lang$core$Native_Platform.incomingPort(
 	'draft',
 	_elm_lang$core$Json_Decode$oneOf(
@@ -9468,6 +9447,27 @@ var _user$project$App_Port$createReminderSuccess = _elm_lang$core$Native_Platfor
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'title', _elm_lang$core$Json_Decode$string)));
 var _user$project$App_Port$createReminderFailed = _elm_lang$core$Native_Platform.incomingPort('createReminderFailed', _elm_lang$core$Json_Decode$string);
+var _user$project$App_Port$getUserSuccess = _elm_lang$core$Native_Platform.incomingPort(
+	'getUserSuccess',
+	_elm_lang$core$Json_Decode$oneOf(
+		{
+			ctor: '::',
+			_0: _elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Json_Decode$map,
+					_elm_lang$core$Maybe$Just,
+					A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (email) {
+							return _elm_lang$core$Json_Decode$succeed(
+								{email: email});
+						},
+						A2(_elm_lang$core$Json_Decode$field, 'email', _elm_lang$core$Json_Decode$string))),
+				_1: {ctor: '[]'}
+			}
+		}));
 var _user$project$App_Port$getUserFailed = _elm_lang$core$Native_Platform.incomingPort('getUserFailed', _elm_lang$core$Json_Decode$string);
 var _user$project$App_Port$listReminders = _elm_lang$core$Native_Platform.outgoingPort(
 	'listReminders',
@@ -9484,8 +9484,8 @@ var _user$project$App_Port$parseQuery = _elm_lang$core$Native_Platform.outgoingP
 	function (v) {
 		return v;
 	});
-var _user$project$App_Port$requestUser = _elm_lang$core$Native_Platform.outgoingPort(
-	'requestUser',
+var _user$project$App_Port$getUser = _elm_lang$core$Native_Platform.outgoingPort(
+	'getUser',
 	function (v) {
 		return v;
 	});
@@ -9538,7 +9538,7 @@ var _user$project$App_Update$update = F2(
 						_0: _user$project$App_Port$signOut(true),
 						_1: {ctor: '[]'}
 					});
-			case 'AuthChange':
+			case 'GetUserSuccess':
 				var _p3 = _p0._0;
 				var _p2 = _p3;
 				if (_p2.ctor === 'Just') {
@@ -9717,8 +9717,8 @@ var _user$project$App_Update$ListRemindersSuccess = function (a) {
 var _user$project$App_Update$GetUserFailed = function (a) {
 	return {ctor: 'GetUserFailed', _0: a};
 };
-var _user$project$App_Update$AuthChange = function (a) {
-	return {ctor: 'AuthChange', _0: a};
+var _user$project$App_Update$GetUserSuccess = function (a) {
+	return {ctor: 'GetUserSuccess', _0: a};
 };
 var _user$project$App_Update$SignOut = {ctor: 'SignOut'};
 var _user$project$App_Update$SignIn = {ctor: 'SignIn'};
@@ -10692,10 +10692,10 @@ var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _user$project$App_Port$authChange(_user$project$App_Update$AuthChange),
+			_0: _user$project$App_Port$getUserSuccess(_user$project$App_Update$GetUserSuccess),
 			_1: {
 				ctor: '::',
-				_0: _user$project$App_Port$draft(_user$project$App_Update$SetDraft),
+				_0: _user$project$App_Port$getUserFailed(_user$project$App_Update$GetUserFailed),
 				_1: {
 					ctor: '::',
 					_0: _user$project$App_Port$listRemindersSuccess(_user$project$App_Update$ListRemindersSuccess),
@@ -10710,7 +10710,7 @@ var _user$project$Main$subscriptions = function (model) {
 								_0: _user$project$App_Port$createReminderFailed(_user$project$App_Update$CreateReminderFailed),
 								_1: {
 									ctor: '::',
-									_0: _user$project$App_Port$getUserFailed(_user$project$App_Update$GetUserFailed),
+									_0: _user$project$App_Port$draft(_user$project$App_Update$SetDraft),
 									_1: {
 										ctor: '::',
 										_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$PeriodicTasks),
@@ -10733,7 +10733,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 				{user: _krisajenkins$remotedata$RemoteData$Loading}),
 			{
 				ctor: '::',
-				_0: _user$project$App_Port$requestUser(true),
+				_0: _user$project$App_Port$getUser(true),
 				_1: {ctor: '[]'}
 			}),
 		view: _user$project$App_View$view,

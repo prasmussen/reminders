@@ -1,7 +1,7 @@
 var app = Elm.Main.fullscreen();
 
 // Listen for request user requests from elm
-app.ports.requestUser.subscribe(function() {
+app.ports.getUser.subscribe(function() {
     gapi.load('client:auth2', gapiInit);
 });
 
@@ -162,7 +162,7 @@ function humanDate(dt) {
 // Helper function to send current user to elm
 function sendUser(auth) {
     var user = getUser(auth);
-    app.ports.authChange.send(user);
+    app.ports.getUserSuccess.send(user);
 }
 
 

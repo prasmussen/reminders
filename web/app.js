@@ -8723,8 +8723,19 @@ var _user$project$App_View$renderReminders = function (model) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											when(reminder)),
+										_0: A2(
+											_elm_lang$html$Html$a,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$ToggleRelativeDate),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													when(reminder)),
+												_1: {ctor: '[]'}
+											}),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -8778,18 +8789,7 @@ var _user$project$App_View$renderReminders = function (model) {
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$a,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$ToggleRelativeDate),
-																	_1: {ctor: '[]'}
-																},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('When'),
-																	_1: {ctor: '[]'}
-																}),
+															_0: _elm_lang$html$Html$text('When'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {ctor: '[]'}

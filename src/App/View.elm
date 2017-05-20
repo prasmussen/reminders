@@ -106,7 +106,7 @@ renderReminders model =
         reminderTr reminder =
           tr []
             [ td [] [ a [ href reminder.link ] [ text reminder.title ] ]
-            , td [] [ text (when reminder) ]
+            , td [] [ a [ onClick ToggleRelativeDate ] [ text (when reminder) ] ]
             ]
       in
         div [ id "reminders" ]
@@ -114,7 +114,7 @@ renderReminders model =
               [ thead []
                   [ tr []
                       [ th [ class "reminder-title" ] [ text "Title" ]
-                      , th [] [ a [ onClick ToggleRelativeDate ] [ text "When" ] ]
+                      , th [] [ text "When" ]
                       ]
                   ]
               , tbody [] (List.map reminderTr reminders)

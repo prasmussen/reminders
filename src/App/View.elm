@@ -28,22 +28,22 @@ renderNav model =
           span [] []
   in
     nav [ class "nav has-shadow" ]
-        [ div [ class "container" ]
-            [ div [ class "nav-left" ]
-                [ a [ class "nav-item", href "/" ]
-                    [ text "Reminders" ]
-                ]
-            , div [ class "nav-center" ]
-              [ a [ class "nav-item", href "https://github.com/prasmussen/reminders" ]
-                [ i [ class "fa fa-github" ] [] ]
-              ]
-            , span [ class "nav-toggle", classList [ ("is-active", model.showRightMenuOnMobile) ], onClick ToggleRightMenuOnMobile ]
-                [ span [] [] , span [] [] , span [] [] ]
-            , div [ class "nav-right nav-menu", classList [ ("is-active", model.showRightMenuOnMobile) ] ]
-                [ authLink
-                ]
-            ]
+      [ div [ class "container" ]
+        [ div [ class "nav-left" ]
+          [ a [ class "nav-item", href "/" ]
+            [ text "Reminders" ]
+          ]
+        , div [ class "nav-center" ]
+          [ a [ class "nav-item", href "https://github.com/prasmussen/reminders" ]
+            [ i [ class "fa fa-github" ] [] ]
+          ]
+        , span [ class "nav-toggle", classList [ ("is-active", model.showRightMenuOnMobile) ], onClick ToggleRightMenuOnMobile ]
+          [ span [] [] , span [] [] , span [] [] ]
+        , div [ class "nav-right nav-menu", classList [ ("is-active", model.showRightMenuOnMobile) ] ]
+          [ authLink
+          ]
         ]
+      ]
 
 
 renderContent model =
@@ -169,22 +169,22 @@ renderReminders model =
       in
         div [ id "reminders" ]
           [ table [ class "table" ]
-              [ thead []
-                  [ tr []
-                      [ th [ class "reminder-title" ] [ text "Title" ]
-                      , th [] [ text "When" ]
-                      ]
-                  ]
-              , tbody [] (List.map reminderTr reminders)
+            [ thead []
+              [ tr []
+                [ th [ class "reminder-title" ] [ text "Title" ]
+                , th [] [ text "When" ]
+                ]
               ]
+            , tbody [] (List.map reminderTr reminders)
+            ]
           ]
 
 renderSection title content =
   section [ class "section" ]
-      [ div [ class "container" ]
-          [ div [ class "heading" ]
-              [ h1 [ class "title" ] [ text title ]
-              ]
-          , content
-          ]
+    [ div [ class "container" ]
+      [ div [ class "heading" ]
+        [ h1 [ class "title" ] [ text title ]
+        ]
+      , content
       ]
+    ]

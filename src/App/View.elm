@@ -98,18 +98,23 @@ renderReminders model =
       p [ class "has-text-centered" ] [ text "No upcoming reminders" ]
     Received reminders ->
       let
+        when reminder =
+          if model.showRelativeDate then
+             reminder.startRelative
+          else
+            reminder.start
         reminderTr reminder =
           tr []
             [ td [] [ a [ href reminder.link ] [ text reminder.title ] ]
-            , td [] [ text reminder.startRelative ]
+            , td [] [ text (when reminder) ]
             ]
       in
         div [ id "reminders" ]
           [ table [ class "table" ]
               [ thead []
                   [ tr []
-                      [ th [] [ text "Title" ]
-                      , th [] [ text "When" ]
+                      [ th [ class "reminder-title" ] [ text "Title" ]
+                      , th [] [ a [ onClick ToggleRelativeDate ] [ text "When" ] ]
                       ]
                   ]
               , tbody [] (List.map reminderTr reminders)

@@ -13,3 +13,7 @@ p.control {
 .section .heading .title {
     margin-bottom: 20px;
 }
+
+th.reminder-title {
+    width: 70%;
+}

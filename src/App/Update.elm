@@ -10,6 +10,7 @@ type Msg
   | AuthChange (Maybe User)
   | SetReminders (List Reminder)
   | SetDraft (Maybe Draft)
+  | ToggleRelativeDate
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -30,3 +31,5 @@ update msg model =
       { model | reminders = Received reminders } ! []
     SetDraft draft ->
       { model | draft = draft } ! []
+    ToggleRelativeDate ->
+      { model | showRelativeDate = not model.showRelativeDate } ! []

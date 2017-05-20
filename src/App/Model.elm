@@ -5,6 +5,7 @@ type alias Model =
   , user : RemoteData (Maybe User)
   , reminders : RemoteData (List Reminder)
   , draft : Maybe Draft
+  , showRelativeDate : Bool
   }
 
 type alias User =
@@ -36,4 +37,5 @@ initModel =
   , user = NotAsked
   , reminders = NotAsked
   , draft = Nothing
+  , showRelativeDate = True
   }

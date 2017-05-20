@@ -8260,9 +8260,9 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$App_Model$Model = F4(
-	function (a, b, c, d) {
-		return {query: a, user: b, reminders: c, draft: d};
+var _user$project$App_Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {query: a, user: b, reminders: c, draft: d, showRelativeDate: e};
 	});
 var _user$project$App_Model$User = function (a) {
 	return {email: a};
@@ -8283,7 +8283,7 @@ var _user$project$App_Model$RequestFailed = function (a) {
 };
 var _user$project$App_Model$Loading = {ctor: 'Loading'};
 var _user$project$App_Model$NotAsked = {ctor: 'NotAsked'};
-var _user$project$App_Model$initModel = {query: '', user: _user$project$App_Model$NotAsked, reminders: _user$project$App_Model$NotAsked, draft: _elm_lang$core$Maybe$Nothing};
+var _user$project$App_Model$initModel = {query: '', user: _user$project$App_Model$NotAsked, reminders: _user$project$App_Model$NotAsked, draft: _elm_lang$core$Maybe$Nothing, showRelativeDate: true};
 
 var _user$project$App_Port$authChange = _elm_lang$core$Native_Platform.incomingPort(
 	'authChange',
@@ -8458,15 +8458,23 @@ var _user$project$App_Update$update = F2(
 							reminders: _user$project$App_Model$Received(_p0._0)
 						}),
 					{ctor: '[]'});
-			default:
+			case 'SetDraft':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{draft: _p0._0}),
 					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{showRelativeDate: !model.showRelativeDate}),
+					{ctor: '[]'});
 		}
 	});
+var _user$project$App_Update$ToggleRelativeDate = {ctor: 'ToggleRelativeDate'};
 var _user$project$App_Update$SetDraft = function (a) {
 	return {ctor: 'SetDraft', _0: a};
 };
@@ -8680,6 +8688,9 @@ var _user$project$App_View$renderReminders = function (model) {
 						_1: {ctor: '[]'}
 					});
 			} else {
+				var when = function (reminder) {
+					return model.showRelativeDate ? reminder.startRelative : reminder.start;
+				};
 				var reminderTr = function (reminder) {
 					return A2(
 						_elm_lang$html$Html$tr,
@@ -8712,7 +8723,8 @@ var _user$project$App_View$renderReminders = function (model) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(reminder.startRelative),
+										_0: _elm_lang$html$Html$text(
+											when(reminder)),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -8749,7 +8761,11 @@ var _user$project$App_View$renderReminders = function (model) {
 												ctor: '::',
 												_0: A2(
 													_elm_lang$html$Html$th,
-													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('reminder-title'),
+														_1: {ctor: '[]'}
+													},
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html$text('Title'),
@@ -8762,7 +8778,18 @@ var _user$project$App_View$renderReminders = function (model) {
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('When'),
+															_0: A2(
+																_elm_lang$html$Html$a,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Events$onClick(_user$project$App_Update$ToggleRelativeDate),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('When'),
+																	_1: {ctor: '[]'}
+																}),
 															_1: {ctor: '[]'}
 														}),
 													_1: {ctor: '[]'}

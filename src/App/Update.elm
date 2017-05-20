@@ -15,8 +15,7 @@ type Msg
   | ToggleRelativeDate
   | CreateReminder
   | CreateReminderSuccess Reminder
-  | RequestReminders Time
-  | ParseQuery Time
+  | PeriodicTasks Time
   -- TODO: Add CreateReminderFailed
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -57,7 +56,9 @@ update msg model =
               Success [reminder]
       in
         { model | query = "", draft = Nothing, reminders = newReminders } ! []
-    RequestReminders now ->
-      model ! [Port.requestReminders True]
-    ParseQuery now ->
-      model ! [Port.parseQuery model.query]
+    PeriodicTasks time ->
+      case model.user of
+        Success (Just user) ->
+          model ! [Port.requestReminders True, Port.parseQuery model.query]
+        _ ->
+          model ! []

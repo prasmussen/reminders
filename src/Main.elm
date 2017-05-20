@@ -22,6 +22,5 @@ subscriptions model =
     , Port.reminders SetReminders
     , Port.draft SetDraft
     , Port.createReminderSuccess CreateReminderSuccess
-    , Time.every (Time.minute * 1) RequestReminders
-    , Time.every (Time.minute * 1) ParseQuery
+    , Time.every (Time.minute * 1) PeriodicTasks
     ]

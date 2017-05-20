@@ -9554,31 +9554,31 @@ var _user$project$App_Update$update = F2(
 						model,
 						{query: '', draft: _elm_lang$core$Maybe$Nothing, reminders: newReminders}),
 					{ctor: '[]'});
-			case 'RequestReminders':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$App_Port$requestReminders(true),
-						_1: {ctor: '[]'}
-					});
 			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$App_Port$parseQuery(model.query),
-						_1: {ctor: '[]'}
-					});
+				var _p7 = model.user;
+				if ((_p7.ctor === 'Success') && (_p7._0.ctor === 'Just')) {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{
+							ctor: '::',
+							_0: _user$project$App_Port$requestReminders(true),
+							_1: {
+								ctor: '::',
+								_0: _user$project$App_Port$parseQuery(model.query),
+								_1: {ctor: '[]'}
+							}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{ctor: '[]'});
+				}
 		}
 	});
-var _user$project$App_Update$ParseQuery = function (a) {
-	return {ctor: 'ParseQuery', _0: a};
-};
-var _user$project$App_Update$RequestReminders = function (a) {
-	return {ctor: 'RequestReminders', _0: a};
+var _user$project$App_Update$PeriodicTasks = function (a) {
+	return {ctor: 'PeriodicTasks', _0: a};
 };
 var _user$project$App_Update$CreateReminderSuccess = function (a) {
 	return {ctor: 'CreateReminderSuccess', _0: a};
@@ -10316,12 +10316,8 @@ var _user$project$Main$subscriptions = function (model) {
 						_0: _user$project$App_Port$createReminderSuccess(_user$project$App_Update$CreateReminderSuccess),
 						_1: {
 							ctor: '::',
-							_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$RequestReminders),
-							_1: {
-								ctor: '::',
-								_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$ParseQuery),
-								_1: {ctor: '[]'}
-							}
+							_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$minute * 1, _user$project$App_Update$PeriodicTasks),
+							_1: {ctor: '[]'}
 						}
 					}
 				}
